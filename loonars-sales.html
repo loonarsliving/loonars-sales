@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loonars Living — Manajemen Sales</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#C9A84C;--gold2:#F0D080;--gold3:#8a6c1e;--dark:#0A0A08;--dark2:#111109;--dark3:#1A1A14;--dark4:#222218;--border:#2A2A1E;--border2:#3A3A28;--text:#E8E4D0;--muted:#7A7660;--muted2:#5A5644;--red:#C0392B;--green:#27AE60;--blue:#2980B9;--orange:#D35400;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);min-height:100vh;overflow-x:hidden;}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+#loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:radial-gradient(ellipse at 20% 60%,#1a1500 0%,#0A0A08 55%);}
+.login-wrap{width:400px;animation:fadeUp .6s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+.login-brand{text-align:center;margin-bottom:40px;}
+.login-logo{font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:700;color:var(--gold);letter-spacing:6px;line-height:1;}
+.login-tagline{font-size:11px;color:var(--muted);letter-spacing:4px;text-transform:uppercase;margin-top:6px;}
+.login-divider{width:60px;height:1px;background:var(--gold3);margin:12px auto;}
+.login-box{background:var(--dark2);border:1px solid var(--border);border-radius:4px;padding:40px 36px;}
+.fg{margin-bottom:18px;}
+.fg label{display:block;font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;font-weight:600;}
+.fg input{width:100%;padding:11px 14px;background:var(--dark3);border:1px solid var(--border);border-radius:3px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:border-color .2s;}
+.fg input:focus{border-color:var(--gold);}
+.btn-login{width:100%;padding:13px;background:var(--gold);border:none;border-radius:3px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;color:#000;transition:all .2s;margin-top:4px;}
+.btn-login:hover{background:var(--gold2);}
+.login-err{color:#E57373;font-size:12px;text-align:center;margin-top:12px;display:none;}
+.login-loading{text-align:center;font-size:12px;color:var(--muted);margin-top:12px;display:none;}
+#app{display:none;min-height:100vh;}
+.topbar{background:var(--dark2);border-bottom:1px solid var(--border);padding:0 32px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.topbar-left{display:flex;align-items:center;gap:20px;}
+.topbar-logo{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--gold);letter-spacing:3px;}
+.topbar-sep{width:1px;height:24px;background:var(--border);}
+.topbar-sub{font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
+.topbar-right{display:flex;align-items:center;gap:16px;}
+.topbar-user{font-size:12px;color:var(--muted);}
+.topbar-user strong{color:var(--gold);}
+.btn-sm{padding:7px 16px;border-radius:3px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;}
+.btn-sm:hover{border-color:var(--gold);color:var(--gold);}
+.nav-tabs{background:var(--dark2);border-bottom:1px solid var(--border);padding:0 32px;display:flex;}
+.nav-tab{padding:14px 20px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;letter-spacing:.5px;cursor:pointer;transition:all .2s;text-transform:uppercase;}
+.nav-tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+.page-content{padding:28px 32px;max-width:1400px;}
+.section-card{background:var(--dark2);border:1px solid var(--border);border-radius:4px;padding:24px;margin-bottom:20px;}
+.section-head{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--gold);letter-spacing:2px;margin-bottom:18px;text-transform:uppercase;}
+.sp-legend{display:flex;gap:24px;margin-bottom:16px;flex-wrap:wrap;}
+.sp-legend-item{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);}
+.sp-dot{width:12px;height:12px;border-radius:2px;}
+.sp-canvas{background:#131310;border:1px solid var(--border);border-radius:4px;padding:24px;overflow-x:auto;}
+.sp-villa-banner{background:linear-gradient(135deg,#1a1200,#2a1e00);border:1px solid var(--gold3);border-radius:4px;padding:12px 20px;margin-bottom:20px;display:inline-flex;align-items:center;gap:10px;}
+.sp-villa-text{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:700;color:var(--gold);letter-spacing:2px;text-transform:uppercase;}
+.sp-villa-sub{font-size:10px;color:var(--muted);letter-spacing:1px;margin-top:2px;}
+.sp-row-label{font-size:10px;color:var(--muted2);letter-spacing:2px;font-weight:700;margin-bottom:6px;text-transform:uppercase;}
+.sp-row{display:flex;gap:4px;align-items:stretch;margin-bottom:4px;}
+.sp-path{height:12px;background:var(--border);border-radius:2px;margin:3px 0;}
+.sp-side{width:50px;display:flex;align-items:center;justify-content:center;color:var(--muted2);font-size:8px;letter-spacing:1px;text-align:center;}
+.unit-card{width:110px;min-height:76px;border:1.5px solid;border-radius:3px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .18s;padding:8px 6px;text-align:center;}
+.unit-card.available{background:#0D1F0D;border-color:#1E4A1E;color:#4CAF50;}
+.unit-card.sold{background:#1F0A08;border-color:#5C1A14;color:#E57373;cursor:default;}
+.unit-card.hold{background:#1F1700;border-color:#5C4A00;color:#FFD54F;}
+.unit-card.selected{background:#2A1E00;border-color:var(--gold);color:var(--gold);box-shadow:0 0 16px rgba(201,168,76,.3);}
+.unit-card:hover:not(.sold){transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.4);}
+.unit-code{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;letter-spacing:1px;line-height:1;}
+.unit-status-lbl{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;margin-top:3px;opacity:.8;}
+.unit-buyer{font-size:8px;color:rgba(255,255,255,.4);margin-top:2px;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+.inp-wrap{display:flex;flex-direction:column;}
+.inp-label{font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;font-weight:600;}
+.inp{width:100%;padding:11px 13px;background:var(--dark3);border:1px solid var(--border);border-radius:3px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:border-color .2s;}
+.inp:focus{border-color:var(--gold);}
+.inp::placeholder{color:var(--muted2);}
+.trx-type-row{display:flex;gap:6px;}
+.trx-btn{flex:1;padding:11px 6px;border-radius:3px;border:1.5px solid var(--border);background:var(--dark3);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.5px;text-align:center;}
+.trx-btn:hover{border-color:var(--gold);color:var(--gold);}
+.trx-btn.active-booking{background:#0A1A2A;border-color:#2980B9;color:#5DADE2;}
+.trx-btn.active-dp{background:#0A1F0A;border-color:#27AE60;color:#58D68D;}
+.trx-btn.active-akad{background:#1F0808;border-color:#C0392B;color:#EC7063;}
+.price-wrap{position:relative;}
+.price-prefix{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:12px;font-weight:700;}
+.price-wrap .inp{padding-left:36px;}
+.actions-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;}
+.btn{padding:11px 20px;border-radius:3px;border:none;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;letter-spacing:.5px;cursor:pointer;transition:all .2s;text-transform:uppercase;}
+.btn-gold{background:var(--gold);color:#000;}
+.btn-gold:hover{background:var(--gold2);}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted);}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold);}
+.btn-green{background:var(--green);color:#fff;}
+.btn-green:hover{background:#219A52;}
+.btn-blue{background:var(--blue);color:#fff;}
+.btn-blue:hover{background:#1F618D;}
+.btn-red{background:var(--red);color:#fff;}
+.btn-fee{background:linear-gradient(135deg,#D35400,#E67E22);color:#fff;font-size:13px;padding:12px 24px;}
+.btn-fee:hover{background:linear-gradient(135deg,#BA4A00,#D35400);transform:translateY(-1px);box-shadow:0 6px 20px rgba(211,84,0,.4);}
+.selected-unit-tag{background:var(--gold);color:#000;border-radius:2px;padding:3px 10px;font-size:13px;font-weight:800;letter-spacing:1px;font-family:'Cormorant Garamond',serif;}
+.empty-msg{text-align:center;padding:40px 20px;color:var(--muted);}
+.empty-icon{font-size:36px;margin-bottom:10px;}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;}
+.stat-card{background:var(--dark2);border:1px solid var(--border);border-radius:4px;padding:20px;}
+.stat-label{font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;}
+.stat-val{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:700;line-height:1;}
+.stat-sub{font-size:11px;color:var(--muted);margin-top:6px;}
+.total-card{background:var(--dark2);border:1px solid var(--border);border-radius:4px;padding:20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;}
+.tbl-wrap{background:var(--dark2);border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-bottom:20px;}
+.tbl-head{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.tbl-title{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;}
+table{width:100%;border-collapse:collapse;}
+th{padding:11px 16px;text-align:left;font-size:10px;color:var(--muted);font-weight:700;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--border);}
+td{padding:12px 16px;font-size:12px;border-bottom:1px solid rgba(42,42,30,.6);}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:rgba(201,168,76,.03);}
+.badge{display:inline-block;padding:2px 9px;border-radius:2px;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
+.badge-sold,.badge-akad{background:rgba(192,57,43,.2);color:#E57373;}
+.badge-hold,.badge-booking{background:rgba(41,128,185,.2);color:#5DADE2;}
+.badge-available,.badge-dp{background:rgba(39,174,96,.2);color:#58D68D;}
+.badge-pending{background:rgba(211,84,0,.2);color:#F0B27A;}
+.badge-approved{background:rgba(39,174,96,.2);color:#58D68D;}
+.badge-rejected{background:rgba(127,140,141,.2);color:#BDC3C7;}
+.badge-sales{background:rgba(41,128,185,.2);color:#5DADE2;}
+.badge-owner{background:rgba(201,168,76,.2);color:var(--gold);}
+.subtabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
+.subtab{padding:9px 18px;border-radius:3px;border:1px solid var(--border);background:var(--dark3);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.5px;text-transform:uppercase;}
+.subtab.active{background:var(--gold);color:#000;border-color:var(--gold);}
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:1000;display:none;align-items:center;justify-content:center;backdrop-filter:blur(3px);padding:20px;}
+.modal-ov.open{display:flex;}
+.modal-box{background:var(--dark2);border:1px solid var(--border);border-radius:4px;width:780px;max-width:98vw;max-height:92vh;overflow-y:auto;box-shadow:0 40px 100px rgba(0,0,0,.8);}
+.modal-head{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--dark2);z-index:10;}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--gold);letter-spacing:2px;text-transform:uppercase;}
+.modal-close{width:30px;height:30px;border-radius:3px;background:var(--dark3);border:1px solid var(--border);color:var(--muted);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.modal-close:hover{border-color:var(--red);color:var(--red);}
+.modal-body{padding:24px;}
+.modal-footer{padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end;position:sticky;bottom:0;background:var(--dark2);}
+.db-status{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--muted);}
+.db-dot{width:6px;height:6px;border-radius:50%;background:var(--muted2);}
+.db-dot.ok{background:var(--green);box-shadow:0 0 6px rgba(39,174,96,.5);}
+.db-dot.err{background:var(--red);}
+.notif{position:fixed;bottom:24px;right:24px;z-index:2000;background:var(--dark3);border:1px solid var(--border);border-radius:4px;padding:13px 20px;font-size:12px;font-weight:600;box-shadow:0 8px 32px rgba(0,0,0,.5);transform:translateY(80px);opacity:0;transition:all .3s;max-width:320px;}
+.notif.show{transform:translateY(0);opacity:1;}
+.notif.success{border-color:var(--green);color:#58D68D;}
+.notif.error{border-color:var(--red);color:#E57373;}
+.notif.info{border-color:var(--gold);color:var(--gold);}
+.info-box{background:var(--dark3);border:1px solid var(--border);border-radius:3px;padding:12px 16px;font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:16px;}
+.info-box.warn{border-color:var(--orange);color:#F0B27A;}
+.info-box.success{border-color:var(--green);color:#58D68D;}
+@media print{body>*:not(#printArea){display:none!important;}#printArea{display:block!important;}}
+#printArea{display:none;}
+.spi-doc{background:#fff;color:#111;font-family:'Times New Roman',serif;line-height:1.7;font-size:12px;}
+.spi-kop{display:flex;align-items:center;border-bottom:2px solid #111;padding:10px 32px;}
+.spi-kop-mid{margin-left:12px;border-left:1px solid #ccc;padding-left:14px;font-size:10px;color:#333;font-family:Arial,sans-serif;line-height:1.8;}
+.spi-body{padding:28px 40px 40px;}
+.spi-title{text-align:center;font-weight:700;font-size:15px;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+.spi-subtitle{text-align:center;font-size:12px;margin-bottom:20px;}
+.spi-data-table{width:100%;margin:6px 0;font-size:12px;}
+.spi-data-table td{padding:2px 0;vertical-align:top;}
+.spi-data-table td:first-child{width:185px;}
+.spi-data-table td:nth-child(2){width:12px;}
+.spi-pasal{text-align:center;font-weight:700;font-size:13px;text-decoration:underline;margin-top:18px;margin-bottom:8px;text-transform:uppercase;}
+.spi-ol{margin:0 0 8px 20px;font-size:12px;}
+.spi-ol li{margin-bottom:4px;text-align:justify;}
+.spi-ol-a{list-style-type:lower-alpha;}
+.spi-sign-row{display:flex;justify-content:space-between;margin-top:32px;}
+.spi-sign-box{text-align:center;min-width:140px;}
+.spi-sign-line{height:60px;border-bottom:1px solid #333;margin-bottom:4px;}
+.kwt-doc{background:#fff;color:#111;font-family:'Times New Roman',serif;padding:40px;}
+.kwt-head{border-bottom:3px solid #8B4513;padding-bottom:14px;margin-bottom:18px;display:flex;align-items:center;gap:16px;}
+.kwt-brand{font-size:16px;font-weight:800;color:#8B4513;letter-spacing:2px;font-family:Arial,sans-serif;}
+.kwt-brand-sub{font-size:10px;color:#888;margin-top:2px;font-family:Arial,sans-serif;}
+.kwt-row{display:flex;margin-bottom:8px;font-size:12px;}
+.kwt-row .dl{width:160px;color:#555;font-weight:600;}
+.kwt-amount{text-align:center;margin:18px 0;padding:14px;background:#FFF8E1;border:1.5px dashed #C9A84C;border-radius:4px;}
+.kwt-sign{display:flex;justify-content:space-between;margin-top:28px;}
+.kwt-sign-box{text-align:center;}
+.kwt-sign-line{width:120px;border-bottom:1px solid #333;margin-bottom:4px;height:50px;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-wrap">
+    <div class="login-brand">
+      <div class="login-logo">LOONARS</div>
+      <div class="login-divider"></div>
+      <div class="login-tagline">Private Living — Sales Management</div>
+    </div>
+    <div class="login-box">
+      <div class="fg"><label>Email</label><input id="li-email" type="email" placeholder="email@example.com" onkeydown="if(event.key==='Enter')doLogin()" /></div>
+      <div class="fg"><label>Password</label><input id="li-pass" type="password" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()" /></div>
+      <button class="btn-login" onclick="doLogin()">MASUK</button>
+      <div class="login-loading" id="loginLoading">⏳ Memverifikasi...</div>
+      <div class="login-err" id="loginErr"></div>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo">LOONARS</div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-sub">Manajemen Sales — Private Living</div>
+    </div>
+    <div class="topbar-right">
+      <div class="db-status"><div class="db-dot ok"></div><span>Supabase</span></div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-user">Login: <strong id="topUser"></strong></div>
+      <button class="btn-sm" onclick="doLogout()">Keluar</button>
+    </div>
+  </div>
+  <div class="nav-tabs" id="navTabs"></div>
+  <div class="page-content" id="pageContent"></div>
+</div>
+
+<div class="modal-ov" id="mainModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="modal-title" id="modalTitle"></div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-footer" id="modalFooter"></div>
+  </div>
+</div>
+
+<div class="notif" id="notif"></div>
+<div id="printArea"></div>
+
+<script>
+// ══════════════════════════════════════
+// SUPABASE CONFIG
+// ══════════════════════════════════════
+const SB_URL = "https://gluoioiimapyhchdasfl.supabase.co";
+const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdsdW9pb2lpbWFweWhjaGRhc2ZsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwNDQ3MjAsImV4cCI6MjA5NTYyMDcyMH0.dHVB0jJBMjUunJKSsqbaM3MGCAq-ZRSWQEqvEyUjIyk";
+const SB_HDR = {"Content-Type":"application/json","apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY};
+
+// ══════════════════════════════════════
+// STATE
+// ══════════════════════════════════════
+const UNIT_CODES = { C:["C4","C3","C2","C1"], B:["B4","B3","B2","B1"], A:["A5","A4","A3","A2","A1"] };
+function emptyUnit(code,row){ return {code,row,status:"available",buyer:"",nik:"",phone:"",address:"",type:"",price:0,bookingFee:0,dp:0,pelunasan:0,marketing:"",date:"",handoverDate:"",feeStatus:"",spiNo:""}; }
+let DB = { units:{}, feeRequests:[], spiCounter:0, kwtCounter:0 };
+["C4","C3","C2","C1"].forEach(c=>DB.units[c]=emptyUnit(c,"C"));
+["B4","B3","B2","B1"].forEach(c=>DB.units[c]=emptyUnit(c,"B"));
+["A5","A4","A3","A2","A1"].forEach(c=>DB.units[c]=emptyUnit(c,"A"));
+
+let currentUser = null, selectedUnit = null, currentType = "", ownerTab = "summary";
+
+// ══════════════════════════════════════
+// AUTH — LOGIN PAKAI TABEL users_proyek
+// ══════════════════════════════════════
+async function doLogin() {
+  const email = document.getElementById("li-email").value.trim().toLowerCase();
+  const pass  = document.getElementById("li-pass").value;
+  const errEl = document.getElementById("loginErr");
+  const ldEl  = document.getElementById("loginLoading");
+
+  errEl.style.display = "none";
+  if (!email || !pass) { showErr("Email dan password wajib diisi"); return; }
+
+  ldEl.style.display = "block";
+  document.querySelector(".btn-login").disabled = true;
+
+  try {
+    // Cek di tabel users_proyek
+    const r = await fetch(
+      `${SB_URL}/rest/v1/users_proyek?email=eq.${encodeURIComponent(email)}&select=*`,
+      {headers: SB_HDR}
+    );
+    const rows = await r.json();
+
+    if (!rows.length) { showErr("Email tidak terdaftar"); return; }
+
+    const user = rows[0];
+
+    // Cek password (plain text — bisa di-hash nanti)
+    if (user.password_hash !== pass) { showErr("Password salah"); return; }
+
+    // Cek akses ke aplikasi ini
+    const akses = (user.app_access || "").toLowerCase();
+    const role  = (user.loonars_role || "").toLowerCase();
+
+    if (!akses.includes("loonars") && akses !== "all") {
+      showErr("Akun ini tidak memiliki akses ke Loonars Sales");
+      return;
+    }
+
+    // Set current user
+    currentUser = {
+      email: user.email,
+      nama:  user.nama || user.email,
+      role:  role || "sales",
+      id:    user.id,
+    };
+
+    document.getElementById("topUser").textContent = currentUser.nama + " (" + currentUser.role + ")";
+    document.getElementById("loginScreen").style.display = "none";
+    document.getElementById("app").style.display = "block";
+
+    await loadFromDB();
+    renderApp();
+
+  } catch(e) {
+    showErr("Gagal koneksi ke server: " + e.message);
+  } finally {
+    ldEl.style.display = "none";
+    document.querySelector(".btn-login").disabled = false;
+  }
+}
+
+function showErr(msg) {
+  const el = document.getElementById("loginErr");
+  el.textContent = "⚠ " + msg;
+  el.style.display = "block";
+  document.getElementById("loginLoading").style.display = "none";
+  document.querySelector(".btn-login").disabled = false;
+}
+
+function doLogout() {
+  currentUser = null; selectedUnit = null; currentType = "";
+  document.getElementById("loginScreen").style.display = "flex";
+  document.getElementById("app").style.display = "none";
+  document.getElementById("li-email").value = "";
+  document.getElementById("li-pass").value = "";
+  document.getElementById("loginErr").style.display = "none";
+}
+
+// ══════════════════════════════════════
+// SUPABASE DATA
+// ══════════════════════════════════════
+async function loadFromDB() {
+  try {
+    const r = await fetch(`${SB_URL}/rest/v1/aset?proyek=eq.LL&select=*`, {headers: SB_HDR});
+    if (!r.ok) return;
+    const rows = await r.json();
+    rows.forEach(row => {
+      const code = row.blok;
+      if (!DB.units[code]) return;
+      DB.units[code].status = row.status==="terjual"?"sold":row.status==="dp"?"hold":"available";
+      DB.units[code].buyer  = row.pembeli || "";
+      DB.units[code].price  = parseFloat(row.harga) || 0;
+      DB.units[code].date   = row.tgl_jual || "";
+      try {
+        const ext = JSON.parse(row.ket || "{}");
+        Object.keys(ext).forEach(k => { if(ext[k]) DB.units[code][k] = ext[k]; });
+      } catch {}
+    });
+    // Load fee requests
+    const rf = await fetch(`${SB_URL}/rest/v1/loonars_fee?select=*`, {headers: SB_HDR});
+    if (rf.ok) {
+      const fees = await rf.json();
+      DB.feeRequests = fees.map(f => ({...f, price: parseFloat(f.price)||0}));
+    }
+  } catch(e) { console.warn("loadDB:", e); }
+}
+
+async function saveToSupabase(u) {
+  try {
+    const statusMap = {booking:"dp",hold:"dp",dp:"dp",akad:"terjual",sold:"terjual",available:"tersedia"};
+    const ext = {nik:u.nik,phone:u.phone,address:u.address,type:u.type,spiNo:u.spiNo,marketing:u.marketing,bookingFee:u.bookingFee,dp:u.dp,pelunasan:u.pelunasan,handoverDate:u.handoverDate};
+    const chk  = await fetch(`${SB_URL}/rest/v1/aset?proyek=eq.LL&blok=eq.${u.code}&select=id`, {headers: SB_HDR});
+    const rows = await chk.json();
+    const body = JSON.stringify({status:statusMap[u.status]||"tersedia",pembeli:u.buyer,tgl_jual:u.date,harga:u.price,ket:JSON.stringify(ext)});
+    if (rows.length > 0) {
+      await fetch(`${SB_URL}/rest/v1/aset?proyek=eq.LL&blok=eq.${u.code}`, {method:"PATCH",headers:{...SB_HDR,"Prefer":"return=minimal"},body});
+    } else {
+      await fetch(`${SB_URL}/rest/v1/aset`, {method:"POST",headers:{...SB_HDR,"Prefer":"return=minimal"},body:JSON.stringify({proyek:"LL",tipe:"Villa",blok:u.code,luas:400,harga:u.price,...JSON.parse(body)})});
+    }
+    // Catat jurnal jika akad/sold
+    if (u.status==="sold"||u.status==="akad") {
+      const jNo  = "LL-"+u.code+"-"+Date.now().toString().slice(-5);
+      const jKet = `Penjualan Villa ${u.code} (${u.type}) — ${u.buyer}`;
+      await fetch(`${SB_URL}/rest/v1/jurnal`, {
+        method:"POST", headers:{...SB_HDR,"Prefer":"return=minimal"},
+        body: JSON.stringify([
+          {tgl:u.date,no:jNo,ket:jKet,akun:"1-1004",nama:"Bank Loonars Living",proyek:"LL",d:u.price,k:0},
+          {tgl:u.date,no:jNo,ket:jKet,akun:"4-1001",nama:"Penjualan Villa",proyek:"LL",d:0,k:u.price}
+        ])
+      });
+    }
+    return true;
+  } catch(e) { console.warn("saveDB:", e); return false; }
+}
+
+async function saveFeeToSupabase(fee) {
+  try {
+    await fetch(`${SB_URL}/rest/v1/loonars_fee`, {
+      method:"POST", headers:{...SB_HDR,"Prefer":"return=minimal"},
+      body: JSON.stringify(fee)
+    });
+  } catch {}
+}
+
+async function updateFeeStatus(id, status) {
+  try {
+    await fetch(`${SB_URL}/rest/v1/loonars_fee?id=eq.${id}`, {
+      method:"PATCH", headers:{...SB_HDR,"Prefer":"return=minimal"},
+      body: JSON.stringify({status})
+    });
+  } catch {}
+}
+
+// ══════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════
+const fmtRp  = n => "Rp " + parseInt(n||0).toLocaleString("id-ID");
+const fmtDt  = d => { if(!d)return"—"; try{return new Date(d).toLocaleDateString("id-ID",{day:"2-digit",month:"long",year:"numeric"});}catch{return d;} };
+const today  = () => new Date().toISOString().split("T")[0];
+const newSpi = () => { DB.spiCounter++; return "SPI-LL-"+String(DB.spiCounter).padStart(3,"0"); };
+const newKwt = () => { DB.kwtCounter++; return "KWT-LL-"+String(DB.kwtCounter).padStart(4,"0"); };
+const getDayName = d => { try{return["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"][new Date(d).getDay()];}catch{return"—";} };
+const getRoman   = d => { try{return["I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII"][new Date(d).getMonth()];}catch{return"I";} };
+
+function terbilang(n) {
+  if(!n||isNaN(n))return"nol";
+  const s=["","satu","dua","tiga","empat","lima","enam","tujuh","delapan","sembilan"];
+  const t=["","","dua puluh","tiga puluh","empat puluh","lima puluh","enam puluh","tujuh puluh","delapan puluh","sembilan puluh"];
+  function b(x){
+    if(x===0)return""; if(x<10)return s[x]+" ";
+    if(x<20){if(x===10)return"sepuluh ";if(x===11)return"sebelas ";return s[x-10]+" belas ";}
+    if(x<100)return t[Math.floor(x/10)]+" "+b(x%10);
+    if(x<200)return"seratus "+b(x-100);
+    return s[Math.floor(x/100)]+" ratus "+b(x%100);
+  }
+  let r="",num=parseInt(n);
+  if(num>=1000000000){r+=b(Math.floor(num/1000000000))+"miliar ";num%=1000000000;}
+  if(num>=1000000){r+=b(Math.floor(num/1000000))+"juta ";num%=1000000;}
+  if(num>=1000){r+=(Math.floor(num/1000)===1?"seribu ":b(Math.floor(num/1000))+"ribu ");num%=1000;}
+  return(r+b(num)).trim().replace(/\s+/g," ");
+}
+
+function showNotif(msg, type="info") {
+  const el=document.getElementById("notif");
+  el.textContent=msg; el.className="notif show "+type;
+  clearTimeout(el._t); el._t=setTimeout(()=>el.classList.remove("show"),3500);
+}
+function closeModal(){ document.getElementById("mainModal").classList.remove("open"); }
+document.getElementById("mainModal").addEventListener("click",e=>{if(e.target===e.currentTarget)closeModal();});
+
+function mhLogo(size=56){
+  return `<svg width="${size}" height="${size}" viewBox="0 0 56 56" fill="none"><rect width="56" height="56" fill="#111"/><text x="5" y="38" font-family="Arial Black" font-size="20" font-weight="900" fill="#C9A84C">MH</text></svg>`;
+}
+
+// ══════════════════════════════════════
+// RENDER APP
+// ══════════════════════════════════════
+function renderApp() {
+  if (currentUser.role === "sales") renderSales();
+  else renderOwner();
+}
+
+// ══════════════════════════════════════
+// SALES DASHBOARD
+// ══════════════════════════════════════
+function renderSales() {
+  document.getElementById("navTabs").innerHTML = `<button class="nav-tab active">Dashboard Sales</button>`;
+  document.getElementById("pageContent").innerHTML = buildSiteplan(true) + buildInputPanel();
+}
+
+function buildSiteplan(interactive) {
+  function uCard(code) {
+    const u   = DB.units[code];
+    const sel = code===selectedUnit;
+    const cls = sel?"selected":u.status==="sold"?"sold":u.status==="hold"?"hold":"available";
+    const lbl = u.status==="sold"?"SOLD":u.status==="hold"?"HOLD":"TERSEDIA";
+    const fn  = interactive
+      ? (u.status==="sold"?`showNotif('Unit ${code} sudah SOLD','error')`:`pickUnit('${code}')`)
+      : `ownerUnitDetail('${code}')`;
+    return `<div class="unit-card ${cls}" onclick="${fn}" title="${code}${u.buyer?' — '+u.buyer:''}">
+      <div class="unit-code">${code}</div>
+      <div class="unit-status-lbl">${lbl}</div>
+      ${u.buyer?`<div class="unit-buyer">${u.buyer}</div>`:""}
+    </div>`;
+  }
+  return `<div class="section-card">
+    <div class="section-head">📍 Siteplan — Loonars Private Living</div>
+    <div class="sp-legend">
+      <div class="sp-legend-item"><div class="sp-dot" style="background:#1E4A1E;border:1px solid #27AE60;"></div>Tersedia</div>
+      <div class="sp-legend-item"><div class="sp-dot" style="background:#5C1A14;border:1px solid #C0392B;"></div>Sold</div>
+      <div class="sp-legend-item"><div class="sp-dot" style="background:#1a2a3a;border:1px solid #2980B9;"></div>Hold / Booking</div>
+      ${interactive?`<div class="sp-legend-item"><div class="sp-dot" style="background:var(--gold3);border:1px solid var(--gold);"></div>Dipilih</div>`:""}
+    </div>
+    <div class="sp-canvas">
+      <div class="sp-villa-banner">
+        <div><div class="sp-villa-text">🏡 Loonars Private Living</div><div class="sp-villa-sub">Villa Investment — Sendangadi, Sleman, DIY</div></div>
+      </div>
+      <div class="sp-row-label">Row C</div>
+      <div class="sp-row">${UNIT_CODES.C.map(uCard).join("")}<div class="sp-side" style="color:var(--muted2);">Akses<br>Belakang</div></div>
+      <div class="sp-path"></div>
+      <div class="sp-row-label">Row B</div>
+      <div class="sp-row">${UNIT_CODES.B.map(uCard).join("")}</div>
+      <div class="sp-path"></div>
+      <div class="sp-row-label">Row A</div>
+      <div class="sp-row">${UNIT_CODES.A.map(uCard).join("")}</div>
+    </div>
+  </div>`;
+}
+
+function buildInputPanel() {
+  if (!selectedUnit) return `<div class="section-card" id="inputPanel">
+    <div class="section-head">📋 Input Transaksi</div>
+    <div class="empty-msg"><div class="empty-icon">👆</div>Pilih unit pada siteplan di atas untuk memulai</div>
+  </div>`;
+  const t = currentType || DB.units[selectedUnit].type || "";
+  return `<div class="section-card" id="inputPanel">
+    <div class="section-head" style="display:flex;align-items:center;gap:12px;">
+      Input Transaksi — <div class="selected-unit-tag">${selectedUnit}</div>
+    </div>
+    <div class="form-grid" style="margin-bottom:16px;">
+      <div class="inp-wrap"><label class="inp-label">Nama Lengkap Pembeli</label><input class="inp" id="f_buyer" placeholder="Nama sesuai KTP" /></div>
+      <div class="inp-wrap"><label class="inp-label">NIK</label><input class="inp" id="f_nik" placeholder="16 digit NIK" maxlength="16" /></div>
+      <div class="inp-wrap"><label class="inp-label">Nomor Telepon</label><input class="inp" id="f_phone" placeholder="08xxxxxxxxxx" /></div>
+      <div class="inp-wrap"><label class="inp-label">Tanggal Transaksi</label><input class="inp" id="f_date" type="date" /></div>
+    </div>
+    <div class="inp-wrap" style="margin-bottom:16px;"><label class="inp-label">Alamat KTP Pembeli</label><input class="inp" id="f_address" placeholder="Alamat lengkap sesuai KTP" /></div>
+    <div style="margin-bottom:16px;">
+      <label class="inp-label">Jenis Transaksi</label>
+      <div class="trx-type-row">
+        <button class="trx-btn ${t==="booking"?"active-booking":""}" onclick="setType('booking')">💰 Booking Fee</button>
+        <button class="trx-btn ${t==="dp"?"active-dp":""}" onclick="setType('dp')">📄 Down Payment</button>
+        <button class="trx-btn ${t==="akad"?"active-akad":""}" onclick="setType('akad')">🤝 Akad / Lunas</button>
+      </div>
+    </div>
+    <div class="form-grid-3" style="margin-bottom:16px;">
+      <div class="inp-wrap"><label class="inp-label">Harga Investasi (Rp)</label><div class="price-wrap"><span class="price-prefix">Rp</span><input class="inp" id="f_price" type="number" placeholder="0" /></div></div>
+      <div class="inp-wrap"><label class="inp-label">Booking Fee (Rp)</label><div class="price-wrap"><span class="price-prefix">Rp</span><input class="inp" id="f_bf" type="number" placeholder="0" /></div></div>
+      <div class="inp-wrap"><label class="inp-label">Down Payment (Rp)</label><div class="price-wrap"><span class="price-prefix">Rp</span><input class="inp" id="f_dp" type="number" placeholder="0" /></div></div>
+    </div>
+    <div class="form-grid" style="margin-bottom:16px;">
+      <div class="inp-wrap"><label class="inp-label">Pelunasan / Sisa (Rp)</label><div class="price-wrap"><span class="price-prefix">Rp</span><input class="inp" id="f_pel" type="number" placeholder="0" /></div></div>
+      <div class="inp-wrap"><label class="inp-label">Tanggal Serah Terima</label><input class="inp" id="f_handover" type="date" /></div>
+    </div>
+    <div class="actions-row">
+      <button class="btn btn-gold" onclick="saveUnit()">💾 Simpan</button>
+      <button class="btn btn-green" onclick="printKwitansi()">🖨️ Kwitansi</button>
+      <button class="btn btn-blue" onclick="printSPI()">📜 Cetak SPI</button>
+      <button class="btn btn-fee" onclick="ajukanFee()">🚀 Ajukan Fee</button>
+      <button class="btn btn-ghost" onclick="clearSel()">✕ Batal</button>
+    </div>
+  </div>`;
+}
+
+function pickUnit(code) {
+  if (DB.units[code].status==="sold"){ showNotif("Unit "+code+" sudah SOLD","error"); return; }
+  selectedUnit=code; currentType=DB.units[code].type||"";
+  renderSales();
+  setTimeout(()=>document.getElementById("inputPanel")?.scrollIntoView({behavior:"smooth",block:"start"}),80);
+}
+function clearSel(){ selectedUnit=null; currentType=""; renderSales(); }
+function setType(t){ currentType=t; if(selectedUnit)DB.units[selectedUnit].type=t; renderSales(); setTimeout(()=>document.getElementById("inputPanel")?.scrollIntoView({behavior:"smooth",block:"start"}),50); }
+
+async function saveUnit() {
+  if (!selectedUnit) return;
+  const buyer=document.getElementById("f_buyer")?.value?.trim();
+  const nik=document.getElementById("f_nik")?.value?.trim();
+  const phone=document.getElementById("f_phone")?.value?.trim();
+  const date=document.getElementById("f_date")?.value;
+  const address=document.getElementById("f_address")?.value?.trim();
+  const price=parseInt(document.getElementById("f_price")?.value||0);
+  const bf=parseInt(document.getElementById("f_bf")?.value||0);
+  const dp=parseInt(document.getElementById("f_dp")?.value||0);
+  const pel=parseInt(document.getElementById("f_pel")?.value||0);
+  const handover=document.getElementById("f_handover")?.value;
+  const type=currentType||DB.units[selectedUnit].type;
+  if(!buyer){showNotif("Nama pembeli wajib diisi","error");return;}
+  if(!type){showNotif("Pilih jenis transaksi terlebih dahulu","error");return;}
+  if(!price){showNotif("Harga investasi wajib diisi","error");return;}
+  const u=DB.units[selectedUnit];
+  u.buyer=buyer;u.nik=nik;u.phone=phone;u.date=date;u.address=address;
+  u.price=price;u.bookingFee=bf;u.dp=dp;u.pelunasan=pel;u.handoverDate=handover;
+  u.type=type;u.marketing=currentUser.nama;
+  u.status=type==="akad"?"sold":type==="dp"?"sold":"hold";
+  if(!u.spiNo)u.spiNo=newSpi();
+  const saved=await saveToSupabase(u);
+  showNotif(`✅ Unit ${selectedUnit} disimpan${saved?" & sync database":""}!`,"success");
+  renderSales();
+}
+
+// ══════════════════════════════════════
+// KWITANSI
+// ══════════════════════════════════════
+function printKwitansi() {
+  const u=selectedUnit?DB.units[selectedUnit]:null;
+  if(!u||!u.buyer){showNotif("Simpan data terlebih dahulu","error");return;}
+  const no=newKwt();
+  const typeLabel=u.type==="booking"?"Booking Fee":u.type==="dp"?"Down Payment (DP)":"Akad / Pelunasan";
+  const amount=u.type==="booking"?u.bookingFee:u.type==="dp"?u.dp:u.price;
+  const html=`<div class="kwt-doc">
+    <div class="kwt-head">
+      ${mhLogo(56)}
+      <div style="flex:1;margin-left:14px;">
+        <div class="kwt-brand">PT. MAHA KARYA HALUOLEO</div>
+        <div class="kwt-brand-sub">Loonars Private Living · Jl. Baru Mulungan, Sendangadi, Sleman · +62 822-2888-5223</div>
+      </div>
+      <div style="text-align:right;"><div style="font-size:14px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:1px;">Kwitansi</div><div style="font-size:11px;color:#666;margin-top:3px;">No. ${no}</div></div>
+    </div>
+    <div class="kwt-row"><div class="dl">Tanggal</div><div class="dv">: ${fmtDt(u.date)}</div></div>
+    <div class="kwt-row"><div class="dl">Diterima dari</div><div class="dv">: <strong>${u.buyer}</strong></div></div>
+    <div class="kwt-row"><div class="dl">NIK</div><div class="dv">: ${u.nik||"—"}</div></div>
+    <div class="kwt-row"><div class="dl">Untuk pembayaran</div><div class="dv">: ${typeLabel} — Unit ${u.code} Loonars Private Living</div></div>
+    <div class="kwt-amount">
+      <div style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:1px;">Jumlah Pembayaran</div>
+      <div style="font-size:26px;font-weight:800;color:#8B4513;">${fmtRp(amount)}</div>
+      <div style="font-size:11px;color:#666;margin-top:3px;font-style:italic;">Terbilang: ${terbilang(amount)} rupiah</div>
+    </div>
+    <div class="kwt-sign">
+      <div class="kwt-sign-box"><div class="kwt-sign-line"></div><div style="font-size:10px;color:#555;">Pembeli</div><div style="font-size:11px;font-weight:700;">${u.buyer}</div></div>
+      <div class="kwt-sign-box"><div class="kwt-sign-line"></div><div style="font-size:10px;color:#555;">Marketing</div><div style="font-size:11px;font-weight:700;">${u.marketing||currentUser.nama}</div></div>
+      <div class="kwt-sign-box"><div class="kwt-sign-line"></div><div style="font-size:10px;color:#555;">Direktur Utama</div><div style="font-size:11px;font-weight:700;">Avianto Perdana Pagala</div></div>
+    </div>
+  </div>`;
+  openDocModal("Kwitansi Pembayaran", html);
+}
+
+// ══════════════════════════════════════
+// SPI
+// ══════════════════════════════════════
+function printSPI() {
+  const u=selectedUnit?DB.units[selectedUnit]:null;
+  if(!u||!u.buyer){showNotif("Simpan data terlebih dahulu","error");return;}
+  const spiNo=u.spiNo||newSpi();
+  const html=`<div class="spi-doc">
+    <div class="spi-kop">
+      ${mhLogo(64)}
+      <div style="margin-left:10px;font-family:Arial,sans-serif;font-size:12px;font-weight:700;color:#111;line-height:1.3;">MAHAKARYA<br>HALUOLEO</div>
+      <div class="spi-kop-mid">
+        <div>🏢 Jl. Baru Mulungan, Sendangadi, Sleman</div>
+        <div>📞 +62 822-2888-5223 &nbsp;·&nbsp; ✉ loonarsliving@gmail.com</div>
+      </div>
+    </div>
+    <div class="spi-body">
+      <div class="spi-title">SURAT PERJANJIAN INVESTASI</div>
+      <div class="spi-subtitle">ANTARA<br><strong>PT. MAHA KARYA HALUOLEO</strong><br>DENGAN<br><strong>${u.buyer.toUpperCase()}</strong></div>
+      <p style="text-align:justify;font-size:12px;margin-bottom:12px;">Pada hari ${getDayName(u.date||today())} tanggal ${fmtDt(u.date||today())}, bertempat di Jalan Baru Mulungan Sendangadi, Kabupaten Sleman, Provinsi Daerah Istimewa Yogyakarta 55285, kami yang bertanda tangan di bawah ini:</p>
+      <table class="spi-data-table">
+        <tr><td>1. Nama Penandatangan</td><td>:</td><td><strong>Avianto Perdana Pagala</strong></td></tr>
+        <tr><td>&nbsp;&nbsp;&nbsp;Jabatan</td><td>:</td><td>Direktur Utama</td></tr>
+        <tr><td colspan="3" style="padding:4px 0;">dalam hal ini bertindak untuk dan atas nama:</td></tr>
+        <tr><td>&nbsp;&nbsp;&nbsp;Nama Perusahaan</td><td>:</td><td>PT. MAHA KARYA HALUOLEO</td></tr>
+        <tr><td>&nbsp;&nbsp;&nbsp;Alamat Kantor</td><td>:</td><td>Jl. A. P. Pettarani Ko.idi No.G.10, RT.001/RW.07, Masale, Kec. Panakkukang, Kota Makassar, Sulawesi Selatan 90231.</td></tr>
+        <tr><td colspan="3" style="padding:4px 0;">untuk selanjutnya disebut <strong>PIHAK PERTAMA</strong>,</td></tr>
+        <tr><td style="padding-top:10px;">2. Nama Penandatangan</td><td style="padding-top:10px;">:</td><td style="padding-top:10px;"><strong>${u.buyer}</strong></td></tr>
+        <tr><td>&nbsp;&nbsp;&nbsp;NIK</td><td>:</td><td>${u.nik||"—"}</td></tr>
+        <tr><td>&nbsp;&nbsp;&nbsp;Telepon</td><td>:</td><td>${u.phone||"—"}</td></tr>
+        <tr><td>&nbsp;&nbsp;&nbsp;Alamat KTP</td><td>:</td><td>${u.address||"—"}</td></tr>
+        <tr><td colspan="3" style="padding:4px 0;">untuk selanjutnya disebut <strong>PIHAK KEDUA</strong>,</td></tr>
+      </table>
+      <p style="text-align:justify;font-size:12px;margin:12px 0;"><strong>PIHAK PERTAMA</strong> dan <strong>PIHAK KEDUA</strong> secara bersama-sama disebut <strong>"PARA PIHAK"</strong>. Berdasarkan kesepakatan bersama, PARA PIHAK saling mengikatkan diri dalam perjanjian <strong>"investasi villa"</strong> dengan ketentuan sebagai berikut:</p>
+
+      <div class="spi-pasal">PASAL 1 — OBJEK SEWA MENYEWA</div>
+      <p style="font-size:12px;margin-bottom:8px;">Objek sewa adalah <strong>LOONARS PRIVATE LIVING 1 unit ${u.code}</strong> dengan data:</p>
+      <table class="spi-data-table">
+        <tr><td>Luas Tanah</td><td>:</td><td>882m²</td></tr>
+        <tr><td>Hak Milik NIB</td><td>:</td><td>13.04.0602.14065.</td></tr>
+        <tr><td>Akta Sewa Menyewa</td><td>:</td><td>No. 02 tanggal 03 Desember 2025, dihadapan Notaris Erlan Kurniawan, SH.,M.Kn.</td></tr>
+        <tr><td>Pemegang Hak Tanah</td><td>:</td><td>Ny. Aisha Luvita Wijaya</td></tr>
+        <tr><td>Penyewa Tanah</td><td>:</td><td>Tn. Avianto Perdana Pagala.</td></tr>
+        <tr><td>Lokasi Tanah</td><td>:</td><td>Jl. Baru Mulungan, Sendangadi, Mlati, Sleman, Daerah Istimewa Yogyakarta.</td></tr>
+      </table>
+
+      <div class="spi-pasal">PASAL 2 — JANGKA WAKTU SEWA</div>
+      <ol class="spi-ol">
+        <li>Jangka waktu sewa 20 (<em>dua puluh</em>) tahun, terhitung sejak 30 Juli 2026 sampai 30 Juli 2046;</li>
+        <li>Dapat diperpanjang dengan pemberitahuan 30 hari kalender sebelum berakhir;</li>
+        <li>Perjanjian tidak berakhir karena pergantian jabatan PARA PIHAK;</li>
+        <li>Apabila salah satu pihak meninggal dunia, perjanjian tetap berlaku;</li>
+        <li>Apabila PIHAK KEDUA bermaksud menyewakan kembali kepada pihak lain, pengelolaannya wajib melalui PIHAK PERTAMA sesuai Pasal 11.</li>
+      </ol>
+
+      <div class="spi-pasal">PASAL 3 — FASILITAS</div>
+      <ol class="spi-ol">
+        <li>PIHAK PERTAMA menyediakan: Wardrobe, Kursi, Meja, Set Bed, Cermin, Nakas, Televisi, AC, dan Water Heater.</li>
+        <li>Seluruh pemeliharaan fasilitas menjadi tanggung jawab PIHAK PERTAMA per bulan.</li>
+      </ol>
+
+      <div class="spi-pasal">PASAL 4 — PENGGUNAAN SEWA</div>
+      <ol class="spi-ol">
+        <li>Objek sewa digunakan sebagai Villa oleh PIHAK KEDUA;</li>
+        <li>PIHAK PERTAMA tidak bertanggung jawab atas penggunaan di luar ketentuan.</li>
+      </ol>
+
+      <div class="spi-pasal">PASAL 5 — HARGA DAN CARA PEMBAYARAN</div>
+      <ol class="spi-ol">
+        <li>Harga objek sewa sebesar <strong>${fmtRp(u.price)},00 (<em>${terbilang(u.price)} rupiah</em>)</strong>;</li>
+        <li>Pembayaran secara bertahap:<br>
+          <ol class="spi-ol spi-ol-a" style="margin-top:4px;">
+            <li>Booking Fee: <strong>${fmtRp(u.bookingFee)},00 (<em>${terbilang(u.bookingFee)} rupiah</em>)</strong>, tanggal ${fmtDt(u.date)}</li>
+            <li>Down Payment: <strong>${fmtRp(u.dp)},00 (<em>${terbilang(u.dp)} rupiah</em>)</strong>, tanggal ${fmtDt(u.date)}</li>
+            <li>Pelunasan 100%: <strong>${fmtRp(u.pelunasan)},00 (<em>${terbilang(u.pelunasan)} rupiah</em>)</strong>, pada bulan Juli 2026</li>
+          </ol>
+        </li>
+        <li>Materai, pajak, dan biaya lain menjadi tanggung jawab PIHAK KEDUA;</li>
+        <li>Pembayaran hanya melalui transfer ke rekening PIHAK PERTAMA:<br>
+          <table style="margin:6px 0 0 12px;font-size:12px;">
+            <tr><td style="width:16px;">-</td><td style="width:130px;">Pemilik Rekening</td><td>: PT Maha Karya Haluoleo &nbsp;|&nbsp; No. 5018 8000 2715 &nbsp;|&nbsp; BTN</td></tr>
+            <tr><td>-</td><td>Pemilik Rekening</td><td>: PT Maha Karya Haluoleo &nbsp;|&nbsp; No. 7911385507 &nbsp;|&nbsp; BCA</td></tr>
+          </table>
+        </li>
+      </ol>
+
+      <div class="spi-pasal">PASAL 6 — PENYERAHAN DAN PENGEMBALIAN</div>
+      <ol class="spi-ol">
+        <li>PIHAK PERTAMA menyerahkan objek sewa kepada PIHAK KEDUA pada 30 Juli 2026;</li>
+        <li>PIHAK KEDUA mengembalikan objek sewa pada 30 Juli 2046.</li>
+      </ol>
+
+      <div class="spi-pasal">PASAL 7 — PENGALIHAN OBJEK SEWA</div>
+      <ol class="spi-ol">
+        <li>Pemindahtanganan harus seizin PIHAK PERTAMA;</li>
+        <li>Tidak ada biaya peralihan jika masa sewa dialihkan;</li>
+        <li>Biaya akibat pengalihan ditanggung PIHAK KEDUA dan pihak ketiga.</li>
+      </ol>
+
+      <div class="spi-pasal">PASAL 8 — HAK DAN KEWAJIBAN PIHAK PERTAMA</div>
+      <ol class="spi-ol">
+        <li>Hak: menerima itikad baik, pembayaran, pemberitahuan renovasi, dan pengembalian objek sewa.</li>
+        <li>Kewajiban: beritikad baik, menyediakan fasilitas, menyerahkan tepat waktu, menjamin bebas tuntutan pihak ketiga, memberikan kewenangan penuh kepada PIHAK KEDUA.</li>
+      </ol>
+
+      <div class="spi-pasal">PASAL 9 — HAK DAN KEWAJIBAN PIHAK KEDUA</div>
+      <ol class="spi-ol">
+        <li>Hak: menerima itikad baik, fasilitas, penyerahan tepat waktu, keamanan, jaminan, dan kewenangan penuh penggunaan.</li>
+        <li>Kewajiban: beritikad baik, melakukan pembayaran, menggunakan sesuai peruntukan, mengembalikan tepat waktu, dan membayar maintenance Rp. 650.000,00 per bulan paling lambat tanggal 7.</li>
+      </ol>
+
+      <div class="spi-pasal">PASAL 10 — JAMINAN</div>
+      <ol class="spi-ol">
+        <li>PIHAK PERTAMA menjamin objek sewa adalah miliknya dan tidak dalam sengketa;</li>
+        <li>PIHAK PERTAMA tidak akan mengalihkan objek sewa selama masa perjanjian;</li>
+        <li>BEP investasi villa maksimal 5 (<em>lima</em>) tahun dengan fix income Rp. 5.000.000,00 per bulan;</li>
+        <li>Jika BEP tidak tercapai, PIHAK PERTAMA dikenakan pinalti 2% per bulan atau 24% per tahun dari sisa profit, selama maksimal 12 bulan.</li>
+      </ol>
+
+      <div class="spi-pasal">PASAL 11 — PENGELOLAAN OBJEK VILLA</div>
+      <ol class="spi-ol">
+        <li>Pengelolaan villa wajib menggunakan jasa pengelolaan PIHAK PERTAMA;</li>
+        <li>Bagi hasil: 30% PIHAK PERTAMA dan 70% PIHAK KEDUA setelah dikurangi biaya operasional.</li>
+      </ol>
+
+      <div class="spi-pasal">PASAL 12 — KORESPONDENSI</div>
+      <ol class="spi-ol">
+        <li><strong>PIHAK PERTAMA:</strong> Jl. Baru Mulungan Sendangadi, Kab. Sleman, DIY 55285 · 08222 888 5223 · loonarsliving@gmail.com</li>
+        <li><strong>PIHAK KEDUA:</strong> ${u.address||"—"} · ${u.phone||"—"}</li>
+        <li>Perubahan alamat PIHAK KEDUA wajib diberitahukan maksimal 10 hari kerja.</li>
+      </ol>
+
+      <p style="font-size:11px;color:#444;text-align:justify;margin-top:16px;">Demikian perjanjian ini dibuat rangkap 2 (dua) dengan kekuatan hukum yang sama, dibubuhi materai secukupnya dan ditandatangani oleh PARA PIHAK.</p>
+
+      <div class="spi-sign-row">
+        <div class="spi-sign-box">
+          <div style="font-size:11px;font-weight:700;margin-bottom:4px;">PIHAK PERTAMA</div>
+          <div class="spi-sign-line"></div>
+          <div style="font-weight:700;font-size:12px;">Avianto Perdana Pagala</div>
+          <div style="font-size:11px;color:#555;">DIREKTUR UTAMA<br>PT. MAHA KARYA HALUOLEO</div>
+        </div>
+        <div class="spi-sign-box">
+          <div style="font-size:11px;font-weight:700;margin-bottom:4px;">PIHAK KEDUA</div>
+          <div class="spi-sign-line"></div>
+          <div style="font-weight:700;font-size:12px;">${u.buyer}</div>
+          <div style="font-size:11px;color:#555;">Pemilik Unit Villa</div>
+        </div>
+      </div>
+      <div style="margin-top:24px;display:flex;justify-content:space-between;">
+        <div><div style="font-size:11px;font-weight:700;margin-bottom:4px;">SAKSI I</div><div class="spi-sign-line" style="width:120px;"></div><div style="font-size:11px;">( M. Reza Valevi )</div></div>
+        <div><div style="font-size:11px;font-weight:700;margin-bottom:4px;">SAKSI II</div><div class="spi-sign-line" style="width:120px;"></div><div style="font-size:11px;">&nbsp;</div></div>
+      </div>
+      <div style="font-size:11px;margin-top:16px;color:#333;">Nomor : ${spiNo}/Draft/${getRoman(u.date||today())}/2026;${"—".repeat(40)}</div>
+    </div>
+  </div>`;
+  openDocModal("Surat Perjanjian Investasi", html);
+}
+
+function openDocModal(title, html) {
+  document.getElementById("modalTitle").textContent = title;
+  document.getElementById("modalBody").innerHTML = html;
+  document.getElementById("modalFooter").innerHTML = `
+    <button class="btn btn-ghost" onclick="closeModal()">Tutup</button>
+    <button class="btn btn-gold" onclick="doPrint()">🖨️ Cetak / PDF</button>`;
+  window._printContent = html;
+  document.getElementById("mainModal").classList.add("open");
+}
+function doPrint() {
+  const w = window.open("","_blank","width=900,height=700");
+  w.document.write(`<!DOCTYPE html><html><head><style>body{margin:20px;background:#fff;}@media print{body{margin:0;}}</style></head><body>${window._printContent}</body></html>`);
+  w.document.close(); setTimeout(()=>w.print(),900);
+}
+
+async function ajukanFee() {
+  const u = selectedUnit ? DB.units[selectedUnit] : null;
+  if (!u||!u.buyer){showNotif("Simpan data terlebih dahulu","error");return;}
+  if (!u.type||!u.price){showNotif("Lengkapi data transaksi","error");return;}
+  if (DB.feeRequests.find(f=>f.unit===u.code&&f.status==="pending")){showNotif("Pengajuan fee unit ini sudah ada","error");return;}
+  const fee = {id:Date.now(),unit:u.code,marketing:currentUser.nama,buyer:u.buyer,type:u.type,price:u.price,date:today(),status:"pending"};
+  DB.feeRequests.push(fee);
+  await saveFeeToSupabase(fee);
+  showNotif("🚀 Pengajuan fee dikirim ke Owner!","success");
+}
+
+// ══════════════════════════════════════
+// OWNER DASHBOARD
+// ══════════════════════════════════════
+function renderOwner() {
+  document.getElementById("navTabs").innerHTML = `<button class="nav-tab active">Dashboard Owner / CEO</button>`;
+  document.getElementById("pageContent").innerHTML = `
+    <div class="subtabs">
+      <button class="subtab ${ownerTab==="summary"?"active":""}" onclick="setOwnerTab('summary',event)">📊 Ringkasan</button>
+      <button class="subtab ${ownerTab==="siteplan"?"active":""}" onclick="setOwnerTab('siteplan',event)">🗺️ Siteplan</button>
+      <button class="subtab ${ownerTab==="transactions"?"active":""}" onclick="setOwnerTab('transactions',event)">📋 Transaksi</button>
+      <button class="subtab ${ownerTab==="fee"?"active":""}" onclick="setOwnerTab('fee',event)">💸 Fee Marketing</button>
+      <button class="subtab ${ownerTab==="users"?"active":""}" onclick="setOwnerTab('users',event)">👤 Kelola User</button>
+    </div>
+    <div id="ownerContent"></div>`;
+  renderOwnerContent();
+}
+
+function setOwnerTab(t,e) {
+  ownerTab=t;
+  document.querySelectorAll(".subtab").forEach(b=>b.classList.remove("active"));
+  if(e)e.target.classList.add("active");
+  renderOwnerContent();
+}
+
+function renderOwnerContent() {
+  const el = document.getElementById("ownerContent");
+  if(!el)return;
+  if(ownerTab==="summary") el.innerHTML=renderOwnerSummary();
+  else if(ownerTab==="siteplan") el.innerHTML=buildSiteplan(false);
+  else if(ownerTab==="transactions") el.innerHTML=renderOwnerTrx();
+  else if(ownerTab==="fee") el.innerHTML=renderOwnerFee();
+  else if(ownerTab==="users") el.innerHTML=renderOwnerUsers();
+}
+
+function renderOwnerSummary() {
+  const units=Object.values(DB.units);
+  const sold=units.filter(u=>u.status==="sold");
+  const hold=units.filter(u=>u.status==="hold");
+  const avail=units.filter(u=>u.status==="available");
+  const totalVal=sold.reduce((s,u)=>s+(u.price||0),0);
+  const pendFee=DB.feeRequests.filter(f=>f.status==="pending").length;
+  const byMkt={};
+  sold.forEach(u=>{const m=u.marketing||"—";if(!byMkt[m])byMkt[m]={count:0,val:0};byMkt[m].count++;byMkt[m].val+=u.price||0;});
+  return `
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-label">Unit Terjual</div><div class="stat-val" style="color:var(--red)">${sold.length}</div><div class="stat-sub">dari ${units.length} total unit</div></div>
+    <div class="stat-card"><div class="stat-label">On Hold / Booking</div><div class="stat-val" style="color:var(--blue)">${hold.length}</div><div class="stat-sub">menunggu konfirmasi</div></div>
+    <div class="stat-card"><div class="stat-label">Unit Tersedia</div><div class="stat-val" style="color:var(--green)">${avail.length}</div><div class="stat-sub">siap ditawarkan</div></div>
+  </div>
+  <div class="total-card">
+    <div><div style="font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Total Nilai Closing</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--gold);">${fmtRp(totalVal)}</div></div>
+    <div style="text-align:right;font-size:11px;color:${pendFee>0?"var(--orange)":"var(--green)"};">${pendFee>0?pendFee+" fee menunggu persetujuan":"Semua fee sudah diproses"}</div>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-head"><div class="tbl-title">Performa Marketing</div></div>
+    <table><thead><tr><th>Marketing</th><th>Closing</th><th>Total Nilai</th></tr></thead>
+    <tbody>${Object.entries(byMkt).map(([m,d])=>`<tr><td><strong>${m}</strong></td><td>${d.count} unit</td><td style="color:var(--gold);font-weight:700;">${fmtRp(d.val)}</td></tr>`).join("")||`<tr><td colspan="3" style="text-align:center;color:var(--muted);padding:24px;">Belum ada transaksi</td></tr>`}</tbody>
+    </table>
+  </div>`;
+}
+
+function renderOwnerTrx() {
+  const units=Object.values(DB.units).filter(u=>u.status!=="available");
+  const total=units.reduce((s,u)=>s+(u.price||0),0);
+  const rows=units.map(u=>`<tr>
+    <td><strong>${u.code}</strong></td><td>${u.buyer||"—"}</td><td style="font-size:10px;">${u.nik||"—"}</td><td>${u.phone||"—"}</td>
+    <td><span class="badge badge-${u.type||""}">${u.type==="booking"?"Booking":u.type==="dp"?"DP":u.type==="akad"?"Akad":"—"}</span></td>
+    <td style="color:var(--gold);font-weight:700;">${u.price?fmtRp(u.price):"—"}</td>
+    <td>${u.marketing||"—"}</td><td style="font-size:11px;">${fmtDt(u.date)}</td>
+    <td><span class="badge badge-${u.status}">${u.status.toUpperCase()}</span></td>
+    <td><button onclick="ownerUnitDetail('${u.code}')" style="background:transparent;border:1px solid var(--border);color:var(--muted);padding:4px 10px;border-radius:2px;cursor:pointer;font-size:10px;font-family:inherit;">Detail</button></td>
+  </tr>`).join("")||`<tr><td colspan="10" style="text-align:center;color:var(--muted);padding:28px;">Belum ada transaksi</td></tr>`;
+  return `<div class="tbl-wrap">
+    <div class="tbl-head"><div class="tbl-title">Semua Transaksi (${units.length})</div><div style="font-size:13px;color:var(--gold);font-weight:700;">${fmtRp(total)}</div></div>
+    <div style="overflow-x:auto;"><table><thead><tr><th>Unit</th><th>Pembeli</th><th>NIK</th><th>Telepon</th><th>Jenis</th><th>Nilai</th><th>Marketing</th><th>Tanggal</th><th>Status</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>
+  </div>`;
+}
+
+function renderOwnerFee() {
+  if(!DB.feeRequests.length) return `<div class="section-card"><div class="empty-msg"><div class="empty-icon">💸</div>Belum ada pengajuan fee</div></div>`;
+  const pending=DB.feeRequests.filter(f=>f.status==="pending").length;
+  const rows=DB.feeRequests.map(f=>`<tr>
+    <td><strong>${f.unit}</strong></td><td>${f.marketing}</td><td>${f.buyer}</td>
+    <td><span class="badge badge-${f.type}">${f.type==="booking"?"Booking":f.type==="dp"?"DP":"Akad"}</span></td>
+    <td style="color:var(--gold);font-weight:700;">${fmtRp(f.price)}</td>
+    <td style="font-size:11px;">${fmtDt(f.date)}</td>
+    <td>${f.status==="pending"
+      ?`<button onclick="approveFee(${f.id})" style="background:var(--green);border:none;color:#fff;padding:5px 12px;border-radius:2px;cursor:pointer;font-family:inherit;font-size:10px;font-weight:700;margin-right:4px;">✓ Setuju</button><button onclick="rejectFee(${f.id})" style="background:var(--red);border:none;color:#fff;padding:5px 12px;border-radius:2px;cursor:pointer;font-family:inherit;font-size:10px;font-weight:700;">✕ Tolak</button>`
+      :`<span class="badge badge-${f.status}">${f.status.toUpperCase()}</span>`}</td>
+  </tr>`).join("");
+  return `<div class="tbl-wrap">
+    <div class="tbl-head"><div class="tbl-title">Pengajuan Fee Marketing</div><div style="font-size:11px;color:${pending>0?"var(--orange)":"var(--muted)"};">${pending} pending</div></div>
+    <table><thead><tr><th>Unit</th><th>Marketing</th><th>Pembeli</th><th>Jenis</th><th>Nilai</th><th>Tanggal</th><th>Aksi</th></tr></thead><tbody>${rows}</tbody></table>
+  </div>`;
+}
+
+// ══════════════════════════════════════
+// KELOLA USER (OWNER ONLY)
+// ══════════════════════════════════════
+let userList = [];
+async function renderOwnerUsers() {
+  document.getElementById("ownerContent").innerHTML = `<div class="empty-msg"><div class="empty-icon">⏳</div>Memuat data user...</div>`;
+  try {
+    const r = await fetch(`${SB_URL}/rest/v1/users_proyek?select=*&order=id.asc`, {headers: SB_HDR});
+    userList = await r.json();
+  } catch { userList = []; }
+
+  const rows = userList.map(u => `<tr>
+    <td><strong>${u.nama||"—"}</strong></td>
+    <td style="font-size:11px;">${u.email}</td>
+    <td><span class="badge badge-${u.loonars_role||"none"}">${u.loonars_role||"—"}</span></td>
+    <td><span class="badge" style="background:rgba(201,168,76,.1);color:var(--gold);">${u.app_access||"finance"}</span></td>
+    <td>
+      <button onclick="editUser(${u.id})" style="background:transparent;border:1px solid var(--border);color:var(--muted);padding:4px 10px;border-radius:2px;cursor:pointer;font-size:10px;font-family:inherit;margin-right:4px;">Edit</button>
+      <button onclick="deleteUser(${u.id},'${u.email}')" style="background:transparent;border:1px solid var(--red);color:var(--red);padding:4px 10px;border-radius:2px;cursor:pointer;font-size:10px;font-family:inherit;">Hapus</button>
+    </td>
+  </tr>`).join("") || `<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:24px;">Belum ada user</td></tr>`;
+
+  document.getElementById("ownerContent").innerHTML = `
+    <div class="info-box">
+      <strong>Cara Kerja Login:</strong> User dengan <code>app_access = loonars</code> bisa login di sistem ini.<br>
+      Role <code>sales</code> → hanya bisa input transaksi. Role <code>owner</code> → akses penuh dashboard owner.
+    </div>
+    <div class="section-card">
+      <div class="section-head">➕ Tambah User Baru</div>
+      <div class="form-grid" style="margin-bottom:14px;">
+        <div class="inp-wrap"><label class="inp-label">Nama Lengkap</label><input class="inp" id="nu-nama" placeholder="Nama marketing/owner" /></div>
+        <div class="inp-wrap"><label class="inp-label">Email</label><input class="inp" id="nu-email" type="email" placeholder="email@example.com" /></div>
+        <div class="inp-wrap"><label class="inp-label">Password</label><input class="inp" id="nu-pass" type="password" placeholder="Min. 6 karakter" /></div>
+        <div class="inp-wrap"><label class="inp-label">Role di Loonars</label>
+          <select class="inp" id="nu-role">
+            <option value="sales">Sales — input transaksi saja</option>
+            <option value="owner">Owner — akses penuh</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn btn-gold" onclick="tambahUser()">+ Tambah User</button>
+    </div>
+    <div class="tbl-wrap">
+      <div class="tbl-head"><div class="tbl-title">Daftar User Loonars (${userList.filter(u=>(u.app_access||"").includes("loonars")).length})</div></div>
+      <table><thead><tr><th>Nama</th><th>Email</th><th>Role Loonars</th><th>App Access</th><th>Aksi</th></tr></thead>
+      <tbody>${rows}</tbody></table>
+    </div>`;
+}
+
+async function tambahUser() {
+  const nama  = document.getElementById("nu-nama")?.value?.trim();
+  const email = document.getElementById("nu-email")?.value?.trim().toLowerCase();
+  const pass  = document.getElementById("nu-pass")?.value;
+  const role  = document.getElementById("nu-role")?.value;
+  if(!nama||!email||!pass){showNotif("Nama, email, dan password wajib diisi","error");return;}
+  if(pass.length<6){showNotif("Password minimal 6 karakter","error");return;}
+  try {
+    const r = await fetch(`${SB_URL}/rest/v1/users_proyek`, {
+      method:"POST", headers:{...SB_HDR,"Prefer":"return=minimal"},
+      body: JSON.stringify({nama, email, password_hash:pass, loonars_role:role, app_access:"loonars"})
+    });
+    if(!r.ok) throw new Error(await r.text());
+    showNotif(`✅ User ${nama} berhasil ditambahkan!`,"success");
+    renderOwnerUsers();
+  } catch(e) { showNotif("Gagal: "+e.message,"error"); }
+}
+
+function editUser(id) {
+  const u = userList.find(x=>x.id===id);
+  if(!u)return;
+  document.getElementById("modalTitle").textContent = "Edit User";
+  document.getElementById("modalBody").innerHTML = `
+    <div class="form-grid" style="gap:14px;">
+      <div class="inp-wrap"><label class="inp-label">Nama</label><input class="inp" id="eu-nama" value="${u.nama||""}" /></div>
+      <div class="inp-wrap"><label class="inp-label">Email</label><input class="inp" id="eu-email" value="${u.email}" /></div>
+      <div class="inp-wrap"><label class="inp-label">Password Baru (kosongkan jika tidak ganti)</label><input class="inp" id="eu-pass" type="password" placeholder="Kosongkan jika tidak ganti" /></div>
+      <div class="inp-wrap"><label class="inp-label">Role Loonars</label>
+        <select class="inp" id="eu-role">
+          <option value="sales" ${u.loonars_role==="sales"?"selected":""}>Sales</option>
+          <option value="owner" ${u.loonars_role==="owner"?"selected":""}>Owner</option>
+        </select>
+      </div>
+    </div>`;
+  document.getElementById("modalFooter").innerHTML = `
+    <button class="btn btn-ghost" onclick="closeModal()">Batal</button>
+    <button class="btn btn-gold" onclick="updateUser(${id})">💾 Simpan</button>`;
+  document.getElementById("mainModal").classList.add("open");
+}
+
+async function updateUser(id) {
+  const nama  = document.getElementById("eu-nama")?.value?.trim();
+  const email = document.getElementById("eu-email")?.value?.trim();
+  const pass  = document.getElementById("eu-pass")?.value;
+  const role  = document.getElementById("eu-role")?.value;
+  const body  = {nama, email, loonars_role:role, app_access:"loonars"};
+  if(pass) body.password_hash = pass;
+  try {
+    const r = await fetch(`${SB_URL}/rest/v1/users_proyek?id=eq.${id}`, {
+      method:"PATCH", headers:{...SB_HDR,"Prefer":"return=minimal"},
+      body: JSON.stringify(body)
+    });
+    if(!r.ok) throw new Error(await r.text());
+    showNotif("✅ User berhasil diperbarui","success");
+    closeModal(); renderOwnerUsers();
+  } catch(e) { showNotif("Gagal: "+e.message,"error"); }
+}
