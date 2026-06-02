@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loonars Private Living — Cek Ketersediaan Unit</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--g:#C9A84C;--g2:#F0D080;--d:#0A0A08;--d2:#111109;--d3:#1A1A14;--b:#2A2A1E;--t:#E8E4D0;--m:#7A7660}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--d);color:var(--t);min-height:100vh}
+
+/* HEADER */
+.hdr{background:var(--d2);border-bottom:1px solid var(--b);padding:18px 24px;text-align:center;}
+.hdr-logo{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--g);letter-spacing:5px;}
+.hdr-div{width:50px;height:1px;background:var(--b);margin:8px auto;}
+.hdr-sub{font-size:11px;color:var(--m);letter-spacing:3px;text-transform:uppercase;}
+
+/* MAIN */
+.wrap{max-width:700px;margin:0 auto;padding:28px 20px;}
+
+/* STATUS COUNTER */
+.counters{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;}
+.ctr{background:var(--d2);border:1px solid var(--b);border-radius:4px;padding:16px;text-align:center;}
+.ctr-num{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:700;line-height:1;}
+.ctr-lbl{font-size:10px;color:var(--m);letter-spacing:1.5px;text-transform:uppercase;margin-top:5px;}
+
+/* LEGEND */
+.legend{display:flex;gap:18px;justify-content:center;margin-bottom:20px;flex-wrap:wrap;}
+.li{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--m);}
+.ld{width:13px;height:13px;border-radius:3px;}
+
+/* SITEPLAN */
+.sp-wrap{background:#131310;border:1px solid var(--b);border-radius:4px;padding:20px;overflow-x:auto;margin-bottom:20px;}
+.vb{background:linear-gradient(135deg,#1a1200,#2a1e00);border:1px solid #8a6c1e;border-radius:4px;padding:10px 16px;margin-bottom:18px;display:inline-block;}
+.vbt{font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:700;color:var(--g);letter-spacing:2px;text-transform:uppercase;}
+.vbs{font-size:10px;color:var(--m);margin-top:2px;letter-spacing:1px;}
+.rl{font-size:10px;color:#5A5644;letter-spacing:2px;font-weight:700;margin-bottom:5px;text-transform:uppercase;}
+.rw{display:flex;gap:4px;margin-bottom:4px;flex-wrap:wrap;}
+.sp{height:10px;background:var(--b);border-radius:2px;margin:3px 0;}
+.uc{width:108px;min-height:76px;border:1.5px solid;border-radius:3px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:7px 5px;text-align:center;transition:transform .15s;}
+.uc:hover{transform:translateY(-2px);}
+.uc.av{background:#0D1F0D;border-color:#1E4A1E;color:#4CAF50;}
+.uc.sd{background:#1F0A08;border-color:#5C1A14;color:#E57373;}
+.uc.hd{background:#0A1A2A;border-color:#1a4060;color:#5DADE2;}
+.uco{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;letter-spacing:1px;line-height:1;}
+.ucs{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;margin-top:3px;opacity:.8;}
+
+/* INFO BOX */
+.info{background:var(--d2);border:1px solid var(--b);border-radius:4px;padding:18px 20px;margin-bottom:20px;text-align:center;}
+.info-title{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:600;color:var(--g);letter-spacing:1px;margin-bottom:8px;}
+.info-text{font-size:12px;color:var(--m);line-height:1.8;}
+.info-contact{margin-top:12px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.contact-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:3px;background:var(--g);color:#000;font-size:12px;font-weight:700;text-decoration:none;letter-spacing:.5px;transition:background .2s;}
+.contact-btn:hover{background:var(--g2);}
+
+/* FOOTER */
+.footer{text-align:center;padding:20px;font-size:10px;color:#3A3A28;letter-spacing:1px;text-transform:uppercase;border-top:1px solid var(--b);}
+
+/* LOADING */
+.loading{text-align:center;padding:40px;color:var(--m);font-size:13px;}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-logo">LOONARS</div>
+  <div class="hdr-div"></div>
+  <div class="hdr-sub">Private Living — Ketersediaan Unit</div>
+</div>
+
+<div class="wrap">
+
+  <!-- COUNTERS -->
+  <div class="counters" id="counters">
+    <div class="ctr"><div class="ctr-num" style="color:#4CAF50" id="cnt-av">—</div><div class="ctr-lbl">Tersedia</div></div>
+    <div class="ctr"><div class="ctr-num" style="color:#E57373" id="cnt-sd">—</div><div class="ctr-lbl">Terjual</div></div>
+    <div class="ctr"><div class="ctr-num" style="color:#5DADE2" id="cnt-hd">—</div><div class="ctr-lbl">Hold</div></div>
+  </div>
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <div class="li"><div class="ld" style="background:#0D1F0D;border:1px solid #27AE60;"></div>Tersedia</div>
+    <div class="li"><div class="ld" style="background:#1F0A08;border:1px solid #C0392B;"></div>Terjual</div>
+    <div class="li"><div class="ld" style="background:#0A1A2A;border:1px solid #2980B9;"></div>Hold / Proses</div>
+  </div>
+
+  <!-- SITEPLAN -->
+  <div class="sp-wrap">
+    <div class="vb">
+      <div class="vbt">🏡 Loonars Private Living</div>
+      <div class="vbs">Villa Investment — Sendangadi, Sleman, DIY</div>
+    </div>
+    <div id="siteplan"><div class="loading">⏳ Memuat data unit...</div></div>
+  </div>
+
+  <!-- INFO -->
+  <div class="info">
+    <div class="info-title">Tertarik Investasi?</div>
+    <div class="info-text">
+      Loonars Private Living menawarkan villa eksklusif dengan konsep investasi.<br>
+      BEP maksimal 5 tahun · Fix income Rp 5.000.000/bulan · Bagi hasil 70%
+    </div>
+    <div class="info-contact">
+      <a class="contact-btn" href="https://wa.me/6282228885223" target="_blank">💬 Hubungi Kami</a>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">© 2026 PT. Maha Karya Haluoleo · Loonars Private Living</div>
+
+<script>
+const SU="https://gluoioiimapyhchdasfl.supabase.co";
+const SK="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdsdW9pb2lpbWFweWhjaGRhc2ZsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwNDQ3MjAsImV4cCI6MjA5NTYyMDcyMH0.dHVB0jJBMjUunJKSsqbaM3MGCAq-ZRSWQEqvEyUjIyk";
+
+const ROWS={C:["C4","C3","C2","C1"],B:["B4","B3","B2","B1"],A:["A5","A4","A3","A2","A1"]};
+const SOLD_DEFAULT=["C1","C4","B2","B4","A5"];
+
+let units={};
+// Init default
+Object.values(ROWS).flat().forEach(c=>{
+  units[c]={code:c,status:"available"};
+});
+SOLD_DEFAULT.forEach(c=>units[c].status="sold");
+
+async function loadData(){
+  try{
+    const r=await fetch(`${SU}/rest/v1/aset?proyek=eq.LL&select=blok,status`,{
+      headers:{"apikey":SK,"Authorization":"Bearer "+SK}
+    });
+    if(r.ok){
+      const rows=await r.json();
+      rows.forEach(row=>{
+        if(!units[row.blok])return;
+        units[row.blok].status=row.status==="terjual"?"sold":row.status==="dp"?"hold":"available";
+      });
+    }
+  }catch(e){console.warn("Load:",e)}
+  render();
+}
+
+function render(){
+  let av=0,sd=0,hd=0;
+  Object.values(units).forEach(u=>{
+    if(u.status==="sold")sd++;
+    else if(u.status==="hold")hd++;
+    else av++;
+  });
+  document.getElementById("cnt-av").textContent=av;
+  document.getElementById("cnt-sd").textContent=sd;
+  document.getElementById("cnt-hd").textContent=hd;
+
+  function uCard(code){
+    const u=units[code];
+    const cls=u.status==="sold"?"sd":u.status==="hold"?"hd":"av";
+    const lbl=u.status==="sold"?"TERJUAL":u.status==="hold"?"PROSES":"TERSEDIA";
+    return`<div class="uc ${cls}"><div class="uco">${code}</div><div class="ucs">${lbl}</div></div>`;
+  }
+
+  document.getElementById("siteplan").innerHTML=`
+    <div class="rl">Row C</div><div class="rw">${ROWS.C.map(uCard).join("")}</div>
+    <div class="sp"></div>
+    <div class="rl">Row B</div><div class="rw">${ROWS.B.map(uCard).join("")}</div>
+    <div class="sp"></div>
+    <div class="rl">Row A</div><div class="rw">${ROWS.A.map(uCard).join("")}</div>
+  `;
+}
+
+loadData();
+</script>
+</body>
+</html>
