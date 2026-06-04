@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Loonars Living — Sales</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--g:#C9A84C;--g2:#F0D080;--d:#0A0A08;--d2:#111109;--d3:#1A1A14;--b:#2A2A1E;--t:#E8E4D0;--m:#7A7660;--r:#C0392B;--gr:#27AE60;--bl:#2980B9;--or:#D35400}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--d);color:var(--t);min-height:100vh}
+
+/* LOGIN */
+#Lv{display:flex;align-items:center;justify-content:center;min-height:100vh;background:radial-gradient(ellipse at 20% 60%,#1a1500,#0A0A08 55%)}
+.lw{width:380px;animation:fu .6s ease both}
+@keyframes fu{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.lb{font-family:'Cormorant Garamond',serif;font-size:46px;font-weight:700;color:var(--g);letter-spacing:6px;text-align:center}
+.ls{font-size:10px;color:var(--m);letter-spacing:4px;text-transform:uppercase;text-align:center;margin:6px 0 12px}
+.ld{width:50px;height:1px;background:#8a6c1e;margin:0 auto 28px}
+.lbox{background:var(--d2);border:1px solid var(--b);border-radius:4px;padding:36px 32px}
+.fg{margin-bottom:16px}
+.fg label{display:block;font-size:10px;color:var(--m);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;font-weight:600}
+.inp{width:100%;padding:11px 13px;background:var(--d3);border:1px solid var(--b);border-radius:3px;color:var(--t);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:border-color .2s}
+.inp:focus{border-color:var(--g)}
+.inp::placeholder{color:#5A5644}
+.blg{width:100%;padding:13px;background:var(--g);border:none;border-radius:3px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;color:#000;margin-top:4px;transition:background .2s}
+.blg:hover{background:var(--g2)}
+.lerr{color:#E57373;font-size:12px;text-align:center;margin-top:10px;display:none}
+.lld{color:var(--m);font-size:12px;text-align:center;margin-top:10px;display:none}
+
+/* PROJECT PICKER */
+#PP{display:none;align-items:center;justify-content:center;min-height:100vh;background:radial-gradient(ellipse at 80% 40%,#1a1500,#0A0A08 55%)}
+.ppw{width:520px;max-width:96vw;padding:0 16px;animation:fu .5s ease both}
+.ppt{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--g);letter-spacing:4px;text-align:center;margin-bottom:6px}
+.pps{font-size:10px;color:var(--m);letter-spacing:3px;text-transform:uppercase;text-align:center;margin-bottom:24px}
+.ppgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ppcard{background:var(--d2);border:1.5px solid var(--b);border-radius:4px;padding:18px;cursor:pointer;transition:all .2s;text-align:center}
+.ppcard:hover{border-color:var(--g);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.ppcard-name{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;color:var(--g);margin-bottom:4px}
+.ppcard-sub{font-size:10px;color:var(--m);letter-spacing:1px}
+.ppcard-stat{font-size:10px;margin-top:8px;padding-top:8px;border-top:1px solid var(--b);display:flex;justify-content:space-around;gap:8px;flex-wrap:wrap}
+
+/* APP */
+#Av{display:none}
+.tb{background:var(--d2);border-bottom:1px solid var(--b);padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.tbl{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--g);letter-spacing:3px}
+.tbr{display:flex;align-items:center;gap:12px;font-size:11px;color:var(--m)}
+.tbr strong{color:var(--g)}
+.bsm{padding:6px 14px;border-radius:3px;border:1px solid var(--b);background:transparent;color:var(--m);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;cursor:pointer;transition:all .2s}
+.bsm:hover{border-color:var(--g);color:var(--g)}
+.nav{background:var(--d2);border-bottom:1px solid var(--b);padding:0 24px;display:flex;overflow-x:auto}
+.nt{padding:13px 16px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--m);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:.5px;cursor:pointer;transition:all .2s;text-transform:uppercase;white-space:nowrap}
+.nt.ac{color:var(--g);border-bottom-color:var(--g)}
+.pc{padding:22px 26px;max-width:1280px}
+.sc{background:var(--d2);border:1px solid var(--b);border-radius:4px;padding:22px;margin-bottom:18px}
+.sh{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:600;color:var(--g);letter-spacing:2px;margin-bottom:16px;text-transform:uppercase}
+.lg{display:flex;gap:18px;margin-bottom:14px;flex-wrap:wrap}
+.li{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--m)}
+.ld2{width:11px;height:11px;border-radius:2px;flex-shrink:0}
+.spc{background:#131310;border:1px solid var(--b);border-radius:4px;padding:20px;overflow-x:auto}
+.vb{background:linear-gradient(135deg,#1a1200,#2a1e00);border:1px solid #8a6c1e;border-radius:4px;padding:11px 18px;margin-bottom:18px;display:inline-block}
+.vbt{font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:700;color:var(--g);letter-spacing:2px;text-transform:uppercase}
+.vbs{font-size:10px;color:var(--m);margin-top:2px;letter-spacing:1px}
+.rl{font-size:10px;color:#5A5644;letter-spacing:2px;font-weight:700;margin-bottom:5px;text-transform:uppercase}
+.rw{display:flex;gap:4px;margin-bottom:4px;flex-wrap:wrap}
+.sp{height:10px;background:var(--b);border-radius:2px;margin:3px 0}
+/* Unit cells */
+.uc{width:108px;min-height:74px;border:1.5px solid;border-radius:3px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .18s;padding:7px 5px;text-align:center;position:relative}
+.uc.av{background:#0D1F0D;border-color:#1E4A1E;color:#4CAF50}
+.uc.sd{background:#1F0A08;border-color:#5C1A14;color:#E57373;cursor:default}
+.uc.hd{background:#0A1A2A;border-color:#1a4060;color:#5DADE2;cursor:default}
+.uc.sl{background:#2A1E00;border-color:var(--g);color:var(--g);box-shadow:0 0 14px rgba(201,168,76,.3)}
+.uc:hover.av{transform:translateY(-2px);box-shadow:0 5px 18px rgba(0,0,0,.4)}
+.uco{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:700;letter-spacing:1px;line-height:1}
+.ucs{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;margin-top:2px;opacity:.8}
+.ucb{font-size:8px;color:rgba(255,255,255,.4);margin-top:2px;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* Forms */
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.iw{display:flex;flex-direction:column}
+.il{font-size:10px;color:var(--m);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;font-weight:600}
+.pw{position:relative}
+.pp{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--m);font-size:12px;font-weight:700}
+.pw .inp{padding-left:34px}
+/* Trx type buttons */
+.tr{display:flex;gap:6px}
+.tb2{flex:1;padding:10px 5px;border-radius:3px;border:1.5px solid var(--b);background:var(--d3);color:var(--m);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;text-align:center}
+.tb2:hover{border-color:var(--g);color:var(--g)}
+.tb2.ab{background:#0A1A2A;border-color:#2980B9;color:#5DADE2}
+.tb2.ad{background:#0A1F0A;border-color:#27AE60;color:#58D68D}
+.tb2.aa{background:#1F0808;border-color:#C0392B;color:#EC7063}
+/* Buttons */
+.ar{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}
+.btn{padding:10px 18px;border-radius:3px;border:none;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;letter-spacing:.5px;cursor:pointer;transition:all .2s;text-transform:uppercase}
+.bg{background:var(--g);color:#000}.bg:hover{background:var(--g2)}
+.bgh{background:transparent;border:1px solid var(--b);color:var(--m)}.bgh:hover{border-color:var(--g);color:var(--g)}
+.bgr{background:var(--gr);color:#fff}.bgr:hover{background:#219A52}
+.bbl{background:var(--bl);color:#fff}.bbl:hover{background:#1F618D}
+.bfe{background:linear-gradient(135deg,var(--or),#E67E22);color:#fff;font-size:13px;padding:11px 22px}
+.bfe:hover{transform:translateY(-1px);opacity:.9}
+.sut{background:var(--g);color:#000;border-radius:2px;padding:3px 10px;font-size:13px;font-weight:800;letter-spacing:1px;font-family:'Cormorant Garamond',serif}
+.em{text-align:center;padding:36px 20px;color:var(--m)}
+/* Summary */
+.sr{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
+.sk{background:var(--d2);border:1px solid var(--b);border-radius:4px;padding:18px}
+.sl2{font-size:10px;color:var(--m);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:7px}
+.sv{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;line-height:1}
+.ss{font-size:11px;color:var(--m);margin-top:5px}
+.tc{background:var(--d2);border:1px solid var(--b);border-radius:4px;padding:18px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between}
+/* Tables */
+.tw{background:var(--d2);border:1px solid var(--b);border-radius:4px;overflow:hidden;margin-bottom:18px}
+.th{padding:14px 18px;border-bottom:1px solid var(--b);display:flex;align-items:center;justify-content:space-between}
+.tt{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:600;color:var(--g);letter-spacing:1.5px;text-transform:uppercase}
+table{width:100%;border-collapse:collapse}
+th{padding:10px 14px;text-align:left;font-size:10px;color:var(--m);font-weight:700;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--b)}
+td{padding:11px 14px;font-size:12px;border-bottom:1px solid rgba(42,42,30,.5)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(201,168,76,.03)}
+/* Badges */
+.bge{display:inline-block;padding:2px 8px;border-radius:2px;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.bge-sold{background:rgba(192,57,43,.2);color:#E57373}
+.bge-hold,.bge-booking,.bge-dp{background:rgba(41,128,185,.2);color:#5DADE2}
+.bge-available{background:rgba(39,174,96,.2);color:#58D68D}
+.bge-akad{background:rgba(211,84,0,.2);color:#F0B27A}
+.bge-pending{background:rgba(211,84,0,.2);color:#F0B27A}
+.bge-approved{background:rgba(39,174,96,.2);color:#58D68D}
+.bge-rejected{background:rgba(127,140,141,.2);color:#BDC3C7}
+.bge-sales{background:rgba(41,128,185,.2);color:#5DADE2}
+.bge-owner{background:rgba(201,168,76,.2);color:var(--g)}
+/* Modal */
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:1000;display:none;align-items:center;justify-content:center;backdrop-filter:blur(3px);padding:16px}
+.mo.op{display:flex}
+.mb{background:var(--d2);border:1px solid var(--b);border-radius:4px;width:760px;max-width:98vw;max-height:92vh;overflow-y:auto}
+.mh{padding:18px 22px;border-bottom:1px solid var(--b);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--d2);z-index:10}
+.mt2{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--g);letter-spacing:2px;text-transform:uppercase}
+.mcb{width:28px;height:28px;border-radius:3px;background:var(--d3);border:1px solid var(--b);color:var(--m);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.mcb:hover{border-color:var(--r);color:var(--r)}
+.mbdy{padding:22px}
+.mf{padding:14px 22px;border-top:1px solid var(--b);display:flex;gap:9px;justify-content:flex-end;position:sticky;bottom:0;background:var(--d2)}
+/* Notif */
+.nt2{position:fixed;bottom:22px;right:22px;z-index:2000;background:var(--d3);border:1px solid var(--b);border-radius:4px;padding:12px 18px;font-size:12px;font-weight:600;box-shadow:0 8px 30px rgba(0,0,0,.5);transform:translateY(80px);opacity:0;transition:all .3s;max-width:320px;line-height:1.4}
+.nt2.sh2{transform:translateY(0);opacity:1}
+.nt2.success{border-color:var(--gr);color:#58D68D}
+.nt2.error{border-color:var(--r);color:#E57373}
+.nt2.info{border-color:var(--g);color:var(--g)}
+/* Print */
+@media print{body>*:not(#pr){display:none!important}#pr{display:block!important;background:#fff;color:#111;padding:20px}}
+#pr{display:none}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="Lv">
+  <div class="lw">
+    <div class="lb">LOONARS</div>
+    <div class="ld"></div>
+    <div class="ls">Private Living — Sales Management</div>
+    <div class="lbox">
+      <div class="fg"><label>Email</label><input class="inp" id="le" type="email" placeholder="email@example.com" onkeydown="if(event.key==='Enter')doLogin()"></div>
+      <div class="fg"><label>Password</label><input class="inp" id="lp" type="password" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()"></div>
+      <button class="blg" id="lbtn" onclick="doLogin()">MASUK</button>
+      <div class="lld" id="lld">⏳ Memverifikasi...</div>
+      <div class="lerr" id="lerr"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROJECT PICKER -->
+<div id="PP">
+  <div class="ppw">
+    <div class="ppt">LOONARS</div>
+    <div class="pps">Pilih Project</div>
+    <div class="ppgrid" id="ppgrid"></div>
+    <div style="text-align:center;margin-top:20px">
+      <button class="bsm" onclick="doLogout()">🔒 Keluar</button>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="Av">
+  <div class="tb">
+    <div class="tbl">LOONARS <span id="tb-proj" style="font-size:13px;color:var(--m);letter-spacing:1px;font-family:'DM Sans',sans-serif;font-weight:400;"></span></div>
+    <div class="tbr">
+      <strong id="tu"></strong>
+      <button class="bsm" onclick="goBack()">⬅ Ganti Project</button>
+      <button class="bsm" onclick="doLogout()">Keluar</button>
+    </div>
+  </div>
+  <div class="nav" id="nv"></div>
+  <div class="pc" id="pc"></div>
+</div>
+
+<!-- MODAL -->
+<div class="mo" id="mo">
+  <div class="mb">
+    <div class="mh">
+      <div class="mt2" id="mt2"></div>
+      <button class="mcb" onclick="closeModal()">✕</button>
+    </div>
+    <div class="mbdy" id="mbdy"></div>
+    <div class="mf" id="mf2"></div>
+  </div>
+</div>
+
+<!-- NOTIF -->
+<div class="nt2" id="nt2"></div>
+
+<!-- PRINT -->
+<div id="pr"></div>
+
+<script>
+const SU="https://gluoioiimapyhchdasfl.supabase.co";
+const SK="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdsdW9pb2lpbWFweWhjaGRhc2ZsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwNDQ3MjAsImV4cCI6MjA5NTYyMDcyMH0.dHVB0jJBMjUunJKSsqbaM3MGCAq-ZRSWQEqvEyUjIyk";
+const SH={"Content-Type":"application/json","apikey":SK,"Authorization":"Bearer "+SK};
+const TG_TOKEN="8972034832:AAGCLi9HuGbmzC9O13wH9X8YxVTPG6kMQr8";
+const TG_CHAT="-5180682189";
+
+async function tgSend(msg){try{await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage?chat_id=${TG_CHAT}&parse_mode=HTML&text=${encodeURIComponent(msg)}`,{method:"GET",mode:"no-cors"})}catch{}}
+
+// ── PROJECT HARDCODED ─────────────────────────────────────────────
+const PROYEK_HC=[
+  {id:"AFP",nama:"Al Fath Puuwatu",  lokasi:"Puuwatu, Kendari",       warna:"#f0a500"},
+  {id:"IH", nama:"Introvert House",  lokasi:"Sleman, DIY",            warna:"#00b894"},
+  {id:"LL", nama:"Loonars Living",   lokasi:"Sendangadi, Sleman, DIY",warna:"#a78bfa"},
+  {id:"GCI",nama:"Griya Cariu Indah",lokasi:"Cariu, Bogor",           warna:"#38bdf8"},
+];
+
+// ── STATE ─────────────────────────────────────────────────────────
+let CU=null;       // current user {email, nama, role, id}
+let CP=null;       // current project {id, nama, warna, lokasi}
+let ALL_PJ=[...PROYEK_HC]; // semua project (hardcoded + dynamic)
+let ASET_DB=[];    // aset dari DB untuk project aktif
+let SP_LAYOUT=[];  // siteplan layout [{row, units:[]}]
+let UNITS={};      // unit data in-memory: code -> obj
+let FEES=[];       // fee list
+let SL=null;       // selected unit code
+let CT="";         // current transaction type
+let OT="summary";  // owner tab
+
+// ── HELPERS ───────────────────────────────────────────────────────
+const fR=n=>"Rp "+parseInt(n||0).toLocaleString("id-ID");
+const fD=d=>{if(!d)return"—";try{return new Date(d).toLocaleDateString("id-ID",{day:"2-digit",month:"long",year:"numeric"})}catch{return d}};
+const td=()=>new Date().toISOString().split("T")[0];
+const gD=d=>{try{return["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"][new Date(d).getDay()]}catch{return"—"}};
+const gR=d=>{try{return["I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII"][new Date(d).getMonth()]}catch{return"I"}};
+
+let _spiN=7,_kwtN=0;
+const nSPI=()=>"SPI-LL-"+String(++_spiN).padStart(3,"0");
+const nKWT=()=>"KWT-LL-"+String(++_kwtN).padStart(4,"0");
+
+function mkU(code){return{code,status:"available",buyer:"",nik:"",phone:"",address:"",type:"",price:0,bf:0,dp:0,pel:0,marketing:"",date:"",handover:"",spiNo:""}}
+
+function sN(m,t="info"){
+  const e=document.getElementById("nt2");
+  e.textContent=m;e.className="nt2 sh2 "+t;
+  clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove("sh2"),3500);
+}
+function closeModal(){document.getElementById("mo").classList.remove("op")}
+document.getElementById("mo").addEventListener("click",e=>{if(e.target===e.currentTarget)closeModal()});
+
+function terbilang(n){
+  if(!n||isNaN(n))return"nol";
+  const s=["","satu","dua","tiga","empat","lima","enam","tujuh","delapan","sembilan"];
+  function b(x){
+    if(x===0)return"";if(x<10)return s[x]+" ";if(x===10)return"sepuluh ";if(x===11)return"sebelas ";
+    if(x<20)return s[x-10]+" belas ";
+    if(x<100)return["","","dua puluh","tiga puluh","empat puluh","lima puluh","enam puluh","tujuh puluh","delapan puluh","sembilan puluh"][Math.floor(x/10)]+" "+b(x%10);
+    if(x<200)return"seratus "+b(x-100);return s[Math.floor(x/100)]+" ratus "+b(x%100);
+  }
+  let r="",x=parseInt(n);
+  if(x>=1e9){r+=b(Math.floor(x/1e9))+"miliar ";x%=1e9}
+  if(x>=1e6){r+=b(Math.floor(x/1e6))+"juta ";x%=1e6}
+  if(x>=1000){r+=(Math.floor(x/1000)===1?"seribu ":b(Math.floor(x/1000))+"ribu ");x%=1000}
+  return(r+b(x)).trim().replace(/\s+/g," ");
+}
+
+// ── LOGIN ─────────────────────────────────────────────────────────
+async function doLogin(){
+  const em=document.getElementById("le").value.trim().toLowerCase();
+  const pw=document.getElementById("lp").value;
+  const er=document.getElementById("lerr");
+  const ld=document.getElementById("lld");
+  er.style.display="none";
+  if(!em||!pw){er.textContent="⚠ Email dan password wajib";er.style.display="block";return}
+  ld.style.display="block";
+  document.getElementById("lbtn").disabled=true;
+  try{
+    const r=await fetch(`${SU}/rest/v1/loonars_users?email=eq.${encodeURIComponent(em)}&select=*`,{headers:SH});
+    if(!r.ok)throw new Error("Koneksi gagal");
+    const rows=await r.json();
+    if(!rows.length){er.textContent="⚠ Email tidak terdaftar";er.style.display="block";return}
+    const u=rows[0];
+    if(u.password_hash!==pw){er.textContent="⚠ Password salah";er.style.display="block";return}
+    CU={email:u.email,nama:u.nama||u.email,role:(u.role||"sales").toLowerCase(),id:u.id};
+    document.getElementById("tu").textContent=CU.nama+" ("+CU.role+")";
+    document.getElementById("Lv").style.display="none";
+    await loadAllProjects();
+    showPicker();
+  }catch(e){er.textContent="⚠ Gagal: "+e.message;er.style.display="block"}
+  finally{ld.style.display="none";document.getElementById("lbtn").disabled=false}
+}
+
+function doLogout(){
+  CU=null;CP=null;SL=null;CT="";OT="summary";
+  UNITS={};FEES=[];ASET_DB=[];SP_LAYOUT=[];ALL_PJ=[...PROYEK_HC];
+  document.getElementById("Lv").style.display="flex";
+  document.getElementById("PP").style.display="none";
+  document.getElementById("Av").style.display="none";
+  document.getElementById("le").value="";
+  document.getElementById("lp").value="";
+  document.getElementById("lerr").style.display="none";
+}
+
+function goBack(){
+  CP=null;SL=null;CT="";UNITS={};FEES=[];ASET_DB=[];SP_LAYOUT=[];
+  document.getElementById("Av").style.display="none";
+  showPicker();
+}
+
+// ── LOAD ALL PROJECTS (hardcoded + dynamic) ───────────────────────
+async function loadAllProjects(){
+  try{
+    const r=await fetch(`${SU}/rest/v1/mkh_projects?select=*&order=id.asc`,{headers:SH});
+    if(r.ok){
+      const dyn=await r.json();
+      const hcIds=PROYEK_HC.map(p=>p.id);
+      const dynMapped=dyn.filter(p=>!hcIds.includes(p.kode)).map(p=>({
+        id:p.kode,nama:p.nama,lokasi:p.lokasi||"",warna:p.warna||"#64748b",dbId:p.id
+      }));
+      ALL_PJ=[...PROYEK_HC,...dynMapped];
+    }
+  }catch{
+    // tabel mkh_projects belum ada, pakai hardcoded saja
+    ALL_PJ=[...PROYEK_HC];
+  }
+}
+
+// ── PROJECT PICKER ────────────────────────────────────────────────
+async function showPicker(){
+  document.getElementById("PP").style.display="flex";
+  // Load statistik unit per project
+  let asetAll=[];
+  try{const r=await fetch(`${SU}/rest/v1/aset?select=proyek,status`,{headers:SH});if(r.ok)asetAll=await r.json()}catch{}
+
+  document.getElementById("ppgrid").innerHTML=ALL_PJ.map(p=>{
+    const total=asetAll.filter(a=>a.proyek===p.id).length;
+    const avail=asetAll.filter(a=>a.proyek===p.id&&a.status==="tersedia").length;
+    const sold=asetAll.filter(a=>a.proyek===p.id&&(a.status==="terjual"||a.status==="dp")).length;
+    return`<div class="ppcard" onclick="pickProject('${p.id}')" style="border-color:${p.warna}44">
+      <div style="width:8px;height:8px;border-radius:50%;background:${p.warna};margin:0 auto 8px"></div>
+      <div class="ppcard-name" style="color:${p.warna}">${p.nama}</div>
+      <div class="ppcard-sub">${p.lokasi||p.id}</div>
+      ${total>0
+        ?`<div class="ppcard-stat">
+            <span style="color:#4CAF50">✓ ${avail} Tersedia</span>
+            <span style="color:#E57373">● ${sold} Terjual</span>
+          </div>`
+        :`<div style="font-size:10px;color:var(--m);margin-top:8px;padding-top:8px;border-top:1px solid var(--b)">Belum ada unit</div>`}
+    </div>`;
+  }).join("");
+}
+
+async function pickProject(pid){
+  CP=ALL_PJ.find(p=>p.id===pid)||{id:pid,nama:pid,warna:"#C9A84C",lokasi:""};
+  document.getElementById("PP").style.display="none";
+  document.getElementById("Av").style.display="block";
+  document.getElementById("tb-proj").textContent="· "+CP.nama;
+  await loadProjectData();
+  if(CU.role==="owner") renderOwner();
+  else renderSales();
+}
+
+// ── LOAD PROJECT DATA ─────────────────────────────────────────────
+async function loadProjectData(){
+  UNITS={};ASET_DB=[];SP_LAYOUT=[];FEES=[];
+  try{
+    // 1. Aset
+    const ra=await fetch(`${SU}/rest/v1/aset?proyek=eq.${CP.id}&select=*`,{headers:SH});
+    if(ra.ok){
+      ASET_DB=await ra.json();
+      ASET_DB.forEach(row=>{
+        const c=row.blok;if(!c)return;
+        UNITS[c]=mkU(c);
+        UNITS[c].status=row.status==="terjual"?"sold":row.status==="dp"?"hold":"available";
+        UNITS[c].buyer=row.pembeli||"";
+        UNITS[c].price=parseFloat(row.harga)||0;
+        UNITS[c].date=row.tgl_jual||"";
+        // Parse extra info dari ket field (JSON)
+        try{const x=JSON.parse(row.ket||"{}");if(x&&typeof x==="object"){Object.keys(x).forEach(k=>{if(x[k]!==undefined&&x[k]!=="")UNITS[c][k]=x[k]})}}catch{}
+      });
+    }
+    // 2. Siteplan layout — kolom layout adalah JSONB di Supabase
+    // JSONB dikembalikan sudah sebagai object/array, TIDAK perlu JSON.parse lagi
+    const rs=await fetch(`${SU}/rest/v1/loonars_siteplan?proyek=eq.${CP.id}&select=*&order=id.desc&limit=1`,{headers:SH});
+    if(rs.ok){
+      const sl=await rs.json();
+      if(sl.length&&sl[0].layout){
+        const raw=sl[0].layout;
+        // Jika raw adalah string (table pakai TEXT bukan JSONB), parse dulu
+        SP_LAYOUT=typeof raw==="string"?JSON.parse(raw):raw;
+        if(!Array.isArray(SP_LAYOUT))SP_LAYOUT=[];
+      }
+    }
+    // 3. Fees
+    const rf=await fetch(`${SU}/rest/v1/loonars_fee?proyek=eq.${CP.id}&select=*&order=id.desc`,{headers:SH});
+    if(rf.ok)FEES=await rf.json();
+  }catch(e){console.warn("loadProjectData:",e)}
+}
+
+// ── SAVE UNIT KE DB ───────────────────────────────────────────────
+async function saveUnitDB(u){
+  // BUG FIX: status mapping yang benar
+  // booking/hold → "dp" di DB, akad/sold → "terjual" di DB, available → "tersedia"
+  const statusMap={sold:"terjual",hold:"dp",available:"tersedia"};
+  const dbStatus=statusMap[u.status]||"tersedia";
+  const extra=JSON.stringify({nik:u.nik,phone:u.phone,address:u.address,type:u.type,spiNo:u.spiNo,marketing:u.marketing,bf:u.bf,dp:u.dp,pel:u.pel,handover:u.handover});
+  const payload={status:dbStatus,pembeli:u.buyer,tgl_jual:u.date,harga:u.price,ket:extra};
+
+  try{
+    const asetRow=ASET_DB.find(a=>a.blok===u.code);
+    if(asetRow){
+      // Update by id (paling reliable)
+      await fetch(`${SU}/rest/v1/aset?id=eq.${asetRow.id}`,{method:"PATCH",headers:{...SH,"Prefer":"return=minimal"},body:JSON.stringify(payload)});
+      // Update local cache
+      const idx=ASET_DB.findIndex(a=>a.id===asetRow.id);
+      if(idx>-1)Object.assign(ASET_DB[idx],payload);
+    }else{
+      // Fallback: cari by proyek+blok
+      const ck=await fetch(`${SU}/rest/v1/aset?proyek=eq.${CP.id}&blok=eq.${encodeURIComponent(u.code)}&select=id`,{headers:SH});
+      const rw=ck.ok?await ck.json():[];
+      if(rw.length){
+        await fetch(`${SU}/rest/v1/aset?proyek=eq.${CP.id}&blok=eq.${encodeURIComponent(u.code)}`,{method:"PATCH",headers:{...SH,"Prefer":"return=minimal"},body:JSON.stringify(payload)});
+      }else{
+        // Buat baru
+        await fetch(`${SU}/rest/v1/aset`,{method:"POST",headers:{...SH,"Prefer":"return=minimal"},body:JSON.stringify({proyek:CP.id,tipe:"Unit",blok:u.code,luas:0,harga:u.price,...payload})});
+      }
+    }
+    // Catat ke jurnal jika akad/terjual
+    if(u.status==="sold"){
+      const jno=CP.id+"-"+u.code+"-"+Date.now().toString().slice(-5);
+      const jket=`Penjualan ${CP.nama} Unit ${u.code} — ${u.buyer}`;
+      await fetch(`${SU}/rest/v1/jurnal`,{method:"POST",headers:{...SH,"Prefer":"return=minimal"},body:JSON.stringify([
+        {tgl:u.date||td(),no:jno,ket:jket,akun:"1-1001",nama:"Kas Tunai",proyek:CP.id,d:u.price,k:0},
+        {tgl:u.date||td(),no:jno,ket:jket,akun:"4-1001",nama:"Penjualan",proyek:CP.id,d:0,k:u.price},
+      ])});
+    }
+    return true;
+  }catch(e){console.warn("saveUnitDB:",e);return false}
+}
+
+// ── BUILD SITEPLAN HTML ───────────────────────────────────────────
+function buildSiteplanHTML(interactive){
+  if(!SP_LAYOUT||!SP_LAYOUT.length){
+    return`<div class="em">
+      <div style="font-size:32px">🗺️</div>
+      <div style="margin-top:8px;color:var(--m)">
+        ${CU.role==="owner"?"Siteplan belum dibuat. Buat di tab Kelola Project.":"Siteplan belum tersedia. Hubungi owner."}
+      </div>
+    </div>`;
+  }
+  let html=`<div class="vb"><div class="vbt">🏡 ${CP.nama}</div><div class="vbs">${CP.lokasi||"Loonars Living"}</div></div>`;
+  SP_LAYOUT.forEach(row=>{
+    html+=`<div class="rl">Row ${row.row}</div><div class="rw">`;
+    (row.units||[]).forEach(code=>{
+      const u=UNITS[code]||mkU(code);
+      const isSel=code===SL;
+      const cls=isSel?"sl":u.status==="sold"?"sd":u.status==="hold"?"hd":"av";
+      const lbl=u.status==="sold"?"SOLD":u.status==="hold"?"HOLD":"AV";
+      // Sales: available → pickU, sold/hold → unitDetail
+      // Owner: semua → owDetail
+      let clickFn;
+      if(interactive){
+        clickFn=u.status==="available"?`pickU('${code}')`:`unitDetail('${code}')`;
+      }else{
+        clickFn=`owDetail('${code}')`;
+      }
+      html+=`<div class="uc ${cls}" onclick="${clickFn}" title="${code}${u.buyer?" — "+u.buyer:""}">
+        <div class="uco">${code}</div>
+        <div class="ucs">${lbl}</div>
+        ${u.buyer?`<div class="ucb">${u.buyer}</div>`:""}
+      </div>`;
+    });
+    html+=`</div><div class="sp"></div>`;
+  });
+  return html;
+}
+
+// ── SALES RENDER ──────────────────────────────────────────────────
+function renderSales(){
+  document.getElementById("nv").innerHTML=`<button class="nt ac">Dashboard Sales — ${CP.nama}</button>`;
+  document.getElementById("pc").innerHTML=`
+    <div class="sc">
+      <div class="sh">📍 Siteplan — ${CP.nama}</div>
+      <div class="lg">
+        <div class="li"><div class="ld2" style="background:#0D1F0D;border:1px solid #27AE60"></div>Tersedia</div>
+        <div class="li"><div class="ld2" style="background:#1F0A08;border:1px solid #C0392B"></div>Sold</div>
+        <div class="li"><div class="ld2" style="background:#0A1A2A;border:1px solid #2980B9"></div>Hold/DP</div>
+        <div class="li"><div class="ld2" style="background:#2A1E00;border:1px solid var(--g)"></div>Dipilih</div>
+      </div>
+      <div class="spc">${buildSiteplanHTML(true)}</div>
+    </div>
+    ${buildInputPanel()}`;
+}
+
+function buildInputPanel(){
+  if(!SL)return`<div class="sc" id="ip">
+    <div class="sh">📋 Input Transaksi</div>
+    <div class="em">
+      <div style="font-size:34px">👆</div>
+      <div style="margin-top:8px">Klik blok HIJAU (tersedia) untuk mulai input transaksi</div>
+    </div>
+  </div>`;
+
+  const u=UNITS[SL]||mkU(SL);
+  const t=CT||u.type||"";
+  let nominalFields="";
+  if(t==="booking"){
+    nominalFields=`<div class="fg2" style="margin-bottom:14px">
+      <div class="iw"><label class="il">Harga Investasi (Rp)</label><div class="pw"><span class="pp">Rp</span><input class="inp" id="fpr" type="number" placeholder="0" value="${u.price||""}"></div></div>
+      <div class="iw"><label class="il">Booking Fee (Rp)</label><div class="pw"><span class="pp">Rp</span><input class="inp" id="fbf" type="number" placeholder="0" value="${u.bf||""}"></div></div>
+    </div>`;
+  }else if(t==="dp"){
+    nominalFields=`<div class="fg2" style="margin-bottom:14px">
+      <div class="iw"><label class="il">Harga Investasi (Rp)</label><div class="pw"><span class="pp">Rp</span><input class="inp" id="fpr" type="number" placeholder="0" value="${u.price||""}"></div></div>
+      <div class="iw"><label class="il">Down Payment (Rp)</label><div class="pw"><span class="pp">Rp</span><input class="inp" id="fdp" type="number" placeholder="0" value="${u.dp||""}"></div></div>
+    </div>
+    <div class="fg2" style="margin-bottom:14px">
+      <div class="iw"><label class="il">Pelunasan / Sisa (Rp)</label><div class="pw"><span class="pp">Rp</span><input class="inp" id="fpl" type="number" placeholder="0" value="${u.pel||""}"></div></div>
+      <div class="iw"><label class="il">Tgl Serah Terima</label><input class="inp" id="fh" type="date" value="${u.handover||""}"></div>
+    </div>`;
+  }else if(t==="akad"){
+    nominalFields=`<div class="fg2" style="margin-bottom:14px">
+      <div class="iw"><label class="il">Harga Investasi Lunas (Rp)</label><div class="pw"><span class="pp">Rp</span><input class="inp" id="fpr" type="number" placeholder="0" value="${u.price||""}"></div></div>
+      <div class="iw"><label class="il">Tgl Serah Terima</label><input class="inp" id="fh" type="date" value="${u.handover||""}"></div>
+    </div>`;
+  }
+
+  return`<div class="sc" id="ip">
+    <div class="sh" style="display:flex;align-items:center;gap:10px">Input Transaksi — <div class="sut">${SL}</div></div>
+    <div style="margin-bottom:16px">
+      <label class="il">Pilih Jenis Transaksi</label>
+      <div class="tr">
+        <button class="tb2 ${t==="booking"?"ab":""}" onclick="setTrx('booking')">💰 Booking Fee</button>
+        <button class="tb2 ${t==="dp"?"ad":""}" onclick="setTrx('dp')">📄 Down Payment</button>
+        <button class="tb2 ${t==="akad"?"aa":""}" onclick="setTrx('akad')">🤝 Akad / Lunas</button>
+      </div>
+    </div>
+    ${t?`
+    <div class="fg2" style="margin-bottom:14px">
+      <div class="iw"><label class="il">Nama Lengkap Pembeli</label><input class="inp" id="fb" placeholder="Sesuai KTP" value="${u.buyer||""}"></div>
+      <div class="iw"><label class="il">NIK</label><input class="inp" id="fn" placeholder="16 digit" maxlength="16" value="${u.nik||""}"></div>
+      <div class="iw"><label class="il">Nomor Telepon</label><input class="inp" id="fp" placeholder="08xxxxxxxxxx" value="${u.phone||""}"></div>
+      <div class="iw"><label class="il">Tanggal Transaksi</label><input class="inp" id="fd" type="date" value="${u.date||td()}"></div>
+    </div>
+    <div class="iw" style="margin-bottom:14px"><label class="il">Alamat KTP</label><input class="inp" id="fa" placeholder="Alamat lengkap sesuai KTP" value="${u.address||""}"></div>
+    ${nominalFields}
+    <div class="ar">
+      <button class="btn bg" onclick="doSaveUnit()">💾 Simpan</button>
+      <button class="btn bfe" onclick="doAjukanFee()">🚀 Ajukan Fee</button>
+      <button class="btn bgh" onclick="clearSel()">✕ Batal</button>
+    </div>`:`<div class="em" style="padding:20px"><div style="font-size:13px;color:var(--m)">Pilih jenis transaksi di atas untuk melanjutkan</div></div>`}
+  </div>`;
+}
+
+function pickU(c){
+  SL=c;CT=UNITS[c]?.type||"";
+  renderSales();
+  setTimeout(()=>document.getElementById("ip")?.scrollIntoView({behavior:"smooth",block:"start"}),80);
+}
+function clearSel(){SL=null;CT="";renderSales()}
+function setTrx(t){CT=t;if(SL&&UNITS[SL])UNITS[SL].type=t;renderSales();setTimeout(()=>document.getElementById("ip")?.scrollIntoView({behavior:"smooth",block:"start"}),50)}
+
+async function doSaveUnit(){
+  if(!SL)return;
+  const t=CT||UNITS[SL]?.type;
+  if(!t){sN("Pilih jenis transaksi dahulu","error");return}
+  const buyer=(document.getElementById("fb")?.value||"").trim();
+  if(!buyer){sN("Nama pembeli wajib diisi","error");return}
+
+  const u=UNITS[SL]||mkU(SL);
+  u.buyer=buyer;
+  u.nik=(document.getElementById("fn")?.value||"").trim();
+  u.phone=(document.getElementById("fp")?.value||"").trim();
+  u.date=document.getElementById("fd")?.value||td();
+  u.address=(document.getElementById("fa")?.value||"").trim();
+  u.price=parseInt(document.getElementById("fpr")?.value||0);
+  u.bf=parseInt(document.getElementById("fbf")?.value||0);
+  u.dp=parseInt(document.getElementById("fdp")?.value||0);
+  u.pel=parseInt(document.getElementById("fpl")?.value||0);
+  u.handover=document.getElementById("fh")?.value||"";
+  u.type=t;
+  u.marketing=CU.nama;
+  if(!u.spiNo)u.spiNo=nSPI();
+  UNITS[SL]=u;
+
+  // BUG FIX: status yang benar
+  // booking → hold (sudah dipesannya, tapi belum DP)
+  // dp → hold (sudah DP, tapi belum akad)
+  // akad → sold (sudah lunas/akad)
+  u.status=t==="akad"?"sold":"hold";
+
+  const ok=await saveUnitDB(u);
+
+  if(u.status==="sold"||u.status==="hold"){
+    await tgSend(`💰 <b>UNIT ${u.code} ${u.status==="sold"?"TERJUAL/AKAD":"BOOKING/DP"}</b>\n\n🏠 Project: <b>${CP.nama}</b>\n👤 Pembeli: <b>${u.buyer}</b>\n💼 Jenis: <b>${t==="booking"?"Booking Fee":t==="dp"?"Down Payment":"Akad/Lunas"}</b>\n💰 Nilai: <b>${fR(u.price)}</b>\n📱 Marketing: <b>${CU.nama}</b>`);
+  }
+  sN(`✅ Unit ${SL} disimpan${ok?" & sync DB":""}!`,"success");
+  renderSales();
+}
+
+function unitDetail(c){
+  const u=UNITS[c]||mkU(c);
+  document.getElementById("mt2").textContent=`Unit ${c} — ${u.status==="sold"?"TERJUAL":u.status==="hold"?"HOLD/DP":"—"}`;
+  document.getElementById("mbdy").innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:13px">
+      ${[["Pembeli",`<strong>${u.buyer||"—"}</strong>`],["NIK",u.nik||"—"],["Telepon",u.phone||"—"],
+         ["Jenis",u.type==="booking"?"Booking Fee":u.type==="dp"?"Down Payment":"Akad/Lunas"],
+         ["Harga",u.price?`<strong style="color:var(--g)">${fR(u.price)}</strong>`:"—"],
+         ["Booking Fee",u.bf?fR(u.bf):"—"],["Down Payment",u.dp?fR(u.dp):"—"],
+         ["Pelunasan/Sisa",u.pel?fR(u.pel):"—"],["Tanggal",fD(u.date)],["No. SPI",u.spiNo||"—"]
+       ].map(([l,v])=>`<div><div class="il">${l}</div><div style="font-size:13px">${v}</div></div>`).join("")}
+    </div>
+    <div style="margin-top:13px;padding-top:13px;border-top:1px solid var(--b)">
+      <div class="il">Alamat KTP</div><div style="font-size:13px">${u.address||"—"}</div>
+    </div>`;
+  document.getElementById("mf2").innerHTML=`
+    <button class="btn bgh" onclick="closeModal()">Tutup</button>
+    <button class="btn bgr" onclick="closeModal();printKwt()">🖨️ Kwitansi</button>
+    <button class="btn bbl" onclick="closeModal();printSPI()">📜 SPI</button>
+    <button class="btn bg" onclick="closeModal();editUnit('${c}')">✏️ Update</button>`;
+  document.getElementById("mo").classList.add("op");
+}
+function editUnit(c){SL=c;CT=UNITS[c]?.type||"";renderSales();setTimeout(()=>document.getElementById("ip")?.scrollIntoView({behavior:"smooth",block:"start"}),80)}
+
+async function doAjukanFee(){
+  const u=SL?UNITS[SL]:null;
+  if(!u||!u.buyer){sN("Simpan data unit terlebih dahulu","error");return}
+  if(!u.type||!u.price){sN("Lengkapi jenis & harga transaksi dahulu","error");return}
+  if(FEES.find(f=>f.unit===u.code&&f.proyek===CP.id&&f.status==="pending")){sN("Pengajuan fee sudah ada (pending)","error");return}
+  const fe={unit:u.code,proyek:CP.id,marketing:CU.nama,buyer:u.buyer,type:u.type,price:u.price,date:td(),status:"pending"};
+  try{
+    const r=await fetch(`${SU}/rest/v1/loonars_fee`,{method:"POST",headers:{...SH,"Prefer":"return=representation"},body:JSON.stringify(fe)});
+    if(r.ok){const rows=await r.json();FEES.unshift(...rows)}
+  }catch{}
+  await tgSend(`🚀 <b>PENGAJUAN FEE BARU</b>\n\n🏠 Project: <b>${CP.nama}</b>\n🏠 Unit: <b>${u.code}</b>\n👤 Pembeli: <b>${u.buyer}</b>\n💼 Jenis: <b>${u.type}</b>\n💰 Nilai: <b>${fR(u.price)}</b>\n📱 Marketing: <b>${CU.nama}</b>`);
+  sN("🚀 Pengajuan fee dikirim ke owner!","success");
+}
+
+// ── OWNER RENDER ──────────────────────────────────────────────────
+function renderOwner(){
+  const tabs=["summary","siteplan","trx","fee","users","kelola"];
+  const pending=FEES.filter(f=>f.status==="pending").length;
+  document.getElementById("nv").innerHTML=tabs.map(t=>`<button class="nt ${OT===t?"ac":""}" onclick="setOT('${t}')">${t==="summary"?"📊 Ringkasan":t==="siteplan"?"🗺️ Siteplan":t==="trx"?"📋 Transaksi":t==="fee"?`💸 Fee${pending?` <span style="background:var(--or);color:#fff;border-radius:8px;padding:1px 6px;font-size:9px">${pending}</span>`:""}`:t==="users"?"👤 Users":"⚙️ Kelola Project"}</button>`).join("");
+  document.getElementById("pc").innerHTML=`<div id="oc"></div>`;
+  renderOC();
+}
+function setOT(t){OT=t;renderOwner()}
+function renderOC(){
+  const el=document.getElementById("oc");
+  if(!el)return;
+  if(OT==="summary")el.innerHTML=buildOwnerSummary();
+  else if(OT==="siteplan")el.innerHTML=`<div class="sc"><div class="sh">🗺️ Siteplan — ${CP.nama}</div>
+    <div class="lg">
+      <div class="li"><div class="ld2" style="background:#0D1F0D;border:1px solid #27AE60"></div>Tersedia</div>
+      <div class="li"><div class="ld2" style="background:#1F0A08;border:1px solid #C0392B"></div>Sold</div>
+      <div class="li"><div class="ld2" style="background:#0A1A2A;border:1px solid #2980B9"></div>Hold/DP</div>
+    </div>
+    <div class="spc">${buildSiteplanHTML(false)}</div>
+  </div>`;
+  else if(OT==="trx")el.innerHTML=buildOwnerTrx();
+  else if(OT==="fee")el.innerHTML=buildOwnerFee();
+  else if(OT==="users")loadAndRenderUsers();
+  else if(OT==="kelola")el.innerHTML=buildKelola();
+}
+
+function buildOwnerSummary(){
+  const us=Object.values(UNITS);
+  const sd=us.filter(u=>u.status==="sold"),hd=us.filter(u=>u.status==="hold"),av=us.filter(u=>u.status==="available");
+  const tv=sd.reduce((s,u)=>s+(u.price||0),0);
+  const bm={};sd.forEach(u=>{const m=u.marketing||"—";if(!bm[m])bm[m]={c:0,v:0};bm[m].c++;bm[m].v+=u.price||0});
+  return`<div class="sr">
+    <div class="sk"><div class="sl2">Unit Terjual/Akad</div><div class="sv" style="color:var(--r)">${sd.length}</div><div class="ss">dari ${us.length} total unit</div></div>
+    <div class="sk"><div class="sl2">Hold / DP</div><div class="sv" style="color:var(--bl)">${hd.length}</div><div class="ss">menunggu konfirmasi</div></div>
+    <div class="sk"><div class="sl2">Tersedia</div><div class="sv" style="color:var(--gr)">${av.length}</div><div class="ss">siap ditawarkan</div></div>
+  </div>
+  <div class="tc">
+    <div>
+      <div style="font-size:10px;color:var(--m);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px">Total Nilai Closing — ${CP.nama}</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:var(--g)">${fR(tv)}</div>
+    </div>
+  </div>
+  <div class="tw">
+    <div class="th"><div class="tt">Performa Marketing</div></div>
+    <table><thead><tr><th>Marketing</th><th>Closing</th><th>Total Nilai</th></tr></thead>
+    <tbody>${Object.entries(bm).sort((a,b)=>b[1].v-a[1].v).map(([m,d])=>`<tr>
+      <td><strong>${m}</strong></td><td>${d.c} unit</td>
+      <td style="color:var(--g);font-weight:700">${fR(d.v)}</td>
+    </tr>`).join("")||`<tr><td colspan="3" style="text-align:center;color:var(--m);padding:22px">Belum ada transaksi</td></tr>`}
+    </tbody></table>
+  </div>`;
+}
+
+function buildOwnerTrx(){
+  const us=Object.values(UNITS).filter(u=>u.status!=="available");
+  return`<div class="tw">
+    <div class="th">
+      <div class="tt">Semua Transaksi — ${CP.nama}</div>
+      <div style="font-size:12px;color:var(--g);font-weight:700">${fR(us.reduce((s,u)=>s+(u.price||0),0))}</div>
+    </div>
+    <div style="overflow-x:auto"><table>
+      <thead><tr><th>Unit</th><th>Pembeli</th><th>Telepon</th><th>Jenis</th><th>Nilai</th><th>Marketing</th><th>Tanggal</th><th>Status</th><th></th></tr></thead>
+      <tbody>${us.map(u=>`<tr>
+        <td><strong>${u.code}</strong></td>
+        <td>${u.buyer||"—"}</td>
+        <td>${u.phone||"—"}</td>
+        <td><span class="bge bge-${u.type}">${u.type==="booking"?"Booking":u.type==="dp"?"DP":u.type==="akad"?"Akad":"—"}</span></td>
+        <td style="color:var(--g);font-weight:700">${u.price?fR(u.price):"—"}</td>
+        <td>${u.marketing||"—"}</td>
+        <td style="font-size:11px">${fD(u.date)}</td>
+        <td><span class="bge bge-${u.status}">${u.status.toUpperCase()}</span></td>
+        <td><button onclick="owDetail('${u.code}')" style="background:transparent;border:1px solid var(--b);color:var(--m);padding:3px 9px;border-radius:2px;cursor:pointer;font-size:10px;font-family:inherit">Detail</button></td>
+      </tr>`).join("")||`<tr><td colspan="9" style="text-align:center;color:var(--m);padding:24px">Belum ada transaksi</td></tr>`}
+      </tbody></table></div>
+  </div>`;
+}
+
+function buildOwnerFee(){
+  const fees=FEES.filter(f=>!f.proyek||f.proyek===CP.id);
+  if(!fees.length)return`<div class="sc"><div class="em"><div style="font-size:32px">💸</div><div style="margin-top:8px">Belum ada pengajuan fee</div></div></div>`;
+  return`<div class="tw">
+    <div class="th"><div class="tt">Pengajuan Fee Marketing</div><div style="font-size:11px;color:var(--or)">${fees.filter(f=>f.status==="pending").length} pending</div></div>
+    <table><thead><tr><th>Unit</th><th>Marketing</th><th>Pembeli</th><th>Jenis</th><th>Nilai</th><th>Tgl</th><th>Aksi</th></tr></thead>
+    <tbody>${fees.map(f=>`<tr>
+      <td><strong>${f.unit}</strong></td><td>${f.marketing}</td><td>${f.buyer}</td>
+      <td><span class="bge bge-${f.type}">${f.type==="booking"?"Booking":f.type==="dp"?"DP":"Akad"}</span></td>
+      <td style="color:var(--g);font-weight:700">${fR(f.price)}</td>
+      <td style="font-size:11px">${fD(f.date)}</td>
+      <td>${f.status==="pending"
+        ?`<button onclick="approveFee(${f.id})" style="background:var(--gr);border:none;color:#fff;padding:4px 10px;border-radius:2px;cursor:pointer;font-family:inherit;font-size:10px;font-weight:700;margin-right:3px">✓</button>
+           <button onclick="rejectFee(${f.id})" style="background:var(--r);border:none;color:#fff;padding:4px 10px;border-radius:2px;cursor:pointer;font-family:inherit;font-size:10px;font-weight:700">✕</button>`
+        :`<span class="bge bge-${f.status}">${f.status.toUpperCase()}</span>`}
+      </td>
+    </tr>`).join("")}
+    </tbody></table>
+  </div>`;
+}
+async function approveFee(id){const f=FEES.find(r=>r.id===id);if(f)f.status="approved";try{await fetch(`${SU}/rest/v1/loonars_fee?id=eq.${id}`,{method:"PATCH",headers:{...SH,"Prefer":"return=minimal"},body:JSON.stringify({status:"approved"})})}catch{}sN("✅ Fee disetujui","success");renderOwner()}
+async function rejectFee(id){const f=FEES.find(r=>r.id===id);if(f)f.status="rejected";try{await fetch(`${SU}/rest/v1/loonars_fee?id=eq.${id}`,{method:"PATCH",headers:{...SH,"Prefer":"return=minimal"},body:JSON.stringify({status:"rejected"})})}catch{}sN("Fee ditolak","error");renderOwner()}
+
+function owDetail(c){
+  const u=UNITS[c]||mkU(c);
+  document.getElementById("mt2").textContent="Detail Unit "+c;
+  document.getElementById("mbdy").innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:13px">
+      ${[["Unit",`<span style="font-size:20px;font-family:'Cormorant Garamond',serif;font-weight:700;color:var(--g)">${u.code}</span>`],
+         ["Status",`<span class="bge bge-${u.status}">${u.status.toUpperCase()}</span>`],
+         ["Pembeli",`<strong>${u.buyer||"—"}</strong>`],["NIK",u.nik||"—"],
+         ["Telepon",u.phone||"—"],["Jenis",u.type||"—"],
+         ["Harga",u.price?`<strong style="color:var(--g)">${fR(u.price)}</strong>`:"—"],
+         ["Booking Fee",u.bf?fR(u.bf):"—"],["Down Payment",u.dp?fR(u.dp):"—"],
+         ["Pelunasan",u.pel?fR(u.pel):"—"],["Tanggal",fD(u.date)],["Marketing",u.marketing||"—"]
+       ].map(([l,v])=>`<div><div class="il">${l}</div><div style="font-size:13px">${v}</div></div>`).join("")}
+    </div>
+    <div style="margin-top:13px;padding-top:13px;border-top:1px solid var(--b)">
+      <div class="il">Alamat</div><div style="font-size:13px">${u.address||"—"}</div>
+    </div>
+    ${u.status!=="available"?`<div style="margin-top:13px;padding-top:13px;border-top:1px solid var(--b)">
+      <button class="btn bgh" style="font-size:11px" onclick="resetUnit('${c}')">🔄 Kembalikan ke Tersedia</button>
+    </div>`:""}`;
+  document.getElementById("mf2").innerHTML=`<button class="btn bgh" onclick="closeModal()">Tutup</button>`;
+  document.getElementById("mo").classList.add("op");
+}
+function resetUnit(c){UNITS[c]=mkU(c);closeModal();sN("Unit "+c+" direset ke tersedia","info");renderOC()}
+
+// ── KELOLA PROJECT — SITEPLAN BUILDER ────────────────────────────
+function buildKelola(){
+  const unitCodes=ASET_DB.map(a=>a.blok).filter(Boolean).sort();
+  const assignedCodes=SP_LAYOUT.flatMap(r=>r.units||[]);
+  const unassigned=unitCodes.filter(c=>!assignedCodes.includes(c));
+
+  return`<div style="max-width:900px">
+
+
+
+    <!-- Info project -->
+    <div class="sc" style="border-left:3px solid var(--g)">
+      <div style="font-size:12px;font-weight:700;color:var(--g);margin-bottom:6px">⚙️ Kelola: ${CP.nama}</div>
+      <div style="font-size:11px;color:var(--m);line-height:1.8">
+        ${unitCodes.length} unit terdaftar di sistem keuangan · ${assignedCodes.length} sudah di-layout · ${unassigned.length} belum di-layout
+      </div>
+    </div>
+
+    <!-- Unit pool -->
+    <div class="sc">
+      <div class="sh" style="font-size:14px">Unit Terdaftar (${unitCodes.length})</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;padding:12px;background:var(--d3);border-radius:4px;min-height:44px">
+        ${unitCodes.length===0
+          ?`<div style="font-size:11px;color:var(--m)">Belum ada unit. Input dulu via menu Aset di sistem keuangan.</div>`
+          :unitCodes.map(c=>{
+            const inLayout=assignedCodes.includes(c);
+            const st=UNITS[c]?.status||"available";
+            const stColor=st==="sold"?"#E57373":st==="hold"?"#5DADE2":"#58D68D";
+            return`<span title="${inLayout?"Sudah di layout":"Belum di layout"} · Status: ${st}" style="padding:3px 10px;border-radius:3px;font-size:11px;font-weight:700;border:1px solid ${inLayout?"var(--g)":"var(--b)"};color:${inLayout?"var(--g)":stColor};background:${inLayout?"rgba(201,168,76,0.08)":"transparent"}">${c}</span>`;
+          }).join("")}
+      </div>
+    </div>
+
+    <!-- Layout builder -->
+    <div class="sc">
+      <div class="sh" style="font-size:14px">Layout Siteplan (${SP_LAYOUT.length} baris)</div>
+
+      <!-- Existing rows -->
+      <div id="sprows">
+        ${SP_LAYOUT.length===0
+          ?`<div style="text-align:center;padding:28px;color:var(--m);border:1px dashed var(--b);border-radius:4px;font-size:12px;margin-bottom:14px">Belum ada baris. Tambahkan di form bawah.</div>`
+          :SP_LAYOUT.map((row,ri)=>`
+            <div style="background:var(--d3);border:1px solid var(--b);border-radius:4px;padding:12px 14px;margin-bottom:8px">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+                <div style="font-size:10px;color:var(--m);font-weight:700;letter-spacing:1px;text-transform:uppercase;min-width:60px;flex-shrink:0">Row ${row.row}</div>
+                <div style="display:flex;flex-wrap:wrap;gap:4px;flex:1">
+                  ${(row.units||[]).map(c=>{
+                    const st=UNITS[c]?.status||"available";
+                    const bg=st==="sold"?"rgba(192,57,43,.25)":st==="hold"?"rgba(41,128,185,.25)":"rgba(39,174,96,.15)";
+                    const bc=st==="sold"?"#C0392B":st==="hold"?"#2980B9":"#27AE60";
+                    const tc=st==="sold"?"#E57373":st==="hold"?"#5DADE2":"#58D68D";
+                    return`<span style="background:${bg};border:1px solid ${bc};padding:2px 8px;border-radius:3px;font-size:11px;font-weight:700;color:${tc}">${c}</span>`;
+                  }).join("")}
+                </div>
+                <button onclick="removeRow(${ri})" style="background:none;border:1px solid var(--r);color:var(--r);padding:3px 10px;border-radius:3px;cursor:pointer;font-size:10px;font-family:inherit;white-space:nowrap;flex-shrink:0">🗑 Hapus</button>
+              </div>
+              <div style="font-size:10px;color:var(--m);display:flex;align-items:center;gap:8px">
+                Edit unit:
+                <input class="inp" id="rowedit-${ri}" value="${(row.units||[]).join(",")}" style="display:inline-block;width:auto;flex:1;padding:5px 10px;font-size:11px" placeholder="A1,A2,A3"/>
+              </div>
+            </div>`).join("")}
+      </div>
+
+      <!-- Tambah row baru -->
+      <div style="background:var(--d3);border:1px solid var(--b);border-radius:4px;padding:14px;margin-bottom:14px">
+        <div class="il" style="margin-bottom:8px">Tambah Baris Baru</div>
+        <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
+          <div style="min-width:120px">
+            <label class="il" style="margin-bottom:4px">Nama Row</label>
+            <input class="inp" id="new-rname" placeholder="A, B, C, Blok 1..." style="max-width:160px"/>
+          </div>
+          <div style="flex:2;min-width:200px">
+            <label class="il" style="margin-bottom:4px">Unit (pisah koma)</label>
+            <input class="inp" id="new-runits" placeholder="A1,A2,A3,A4"/>
+          </div>
+          <button class="btn bg" onclick="addRow()" style="white-space:nowrap;flex-shrink:0">+ Tambah Baris</button>
+        </div>
+        <div style="font-size:10px;color:var(--m);margin-top:6px">Masukkan kode unit yang terdaftar di aset. Pisahkan dengan koma, tanpa spasi.</div>
+      </div>
+
+      <!-- Aksi -->
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn bg" onclick="saveSiteplan()">💾 Simpan Siteplan</button>
+        <button class="btn bgh" onclick="resetSiteplan()">🗑 Reset Semua</button>
+        <button class="btn bbl" style="margin-left:auto" onclick="setOT('siteplan');renderOC()">👁 Preview</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function addRow(){
+  const name=(document.getElementById("new-rname")?.value||"").trim();
+  const raw=(document.getElementById("new-runits")?.value||"").trim();
+  if(!name){sN("Nama baris wajib diisi","error");return}
+  if(!raw){sN("Masukkan unit untuk baris ini","error");return}
+  const units=raw.split(",").map(u=>u.trim().toUpperCase()).filter(Boolean);
+  if(!units.length){sN("Format unit tidak valid","error");return}
+  // Warning jika ada unit yang tidak ditemukan di aset
+  const notFound=units.filter(u=>!ASET_DB.find(a=>a.blok===u));
+  if(notFound.length)sN(`⚠ Unit tidak ada di aset: ${notFound.join(", ")}. Tetap ditambahkan.`,"info");
+  // Sync perubahan row yang ada sebelum tambah baru
+  syncRowEdits();
+  SP_LAYOUT.push({row:name,units});
+  document.getElementById("new-rname").value="";
+  document.getElementById("new-runits").value="";
+  // Re-render kelola section saja
+  document.getElementById("oc").innerHTML=buildKelola();
+  sN(`Baris "${name}" ditambahkan (${units.length} unit)`,"success");
+}
+
+function removeRow(ri){
+  syncRowEdits();
+  SP_LAYOUT.splice(ri,1);
+  document.getElementById("oc").innerHTML=buildKelola();
+  sN("Baris dihapus","info");
+}
+
+// Sync input edits ke SP_LAYOUT sebelum operasi lain
+function syncRowEdits(){
+  SP_LAYOUT.forEach((row,ri)=>{
+    const el=document.getElementById(`rowedit-${ri}`);
+    if(el){
+      const units=el.value.split(",").map(u=>u.trim().toUpperCase()).filter(Boolean);
+      if(units.length)row.units=units;
+    }
+  });
+}
+
+function resetSiteplan(){
+  if(!confirm("Reset semua layout siteplan?"))return;
+  SP_LAYOUT=[];
+  document.getElementById("oc").innerHTML=buildKelola();
+  sN("Siteplan direset","info");
+}
+
+async function saveSiteplan(){
+  if(!SP_LAYOUT.length){sN("Layout kosong, tambahkan baris dulu","error");return}
+  // Sync semua row edits terlebih dahulu
+  syncRowEdits();
+
+  try{
+    // BUG FIX: Supabase JSONB column → kirim sebagai object/array langsung, BUKAN JSON.stringify
+    // Supabase akan menerima array JS dan simpan sebagai JSONB
+    const payload={proyek:CP.id,layout:SP_LAYOUT,updated_at:new Date().toISOString()};
+
+    // Cek apakah record sudah ada untuk project ini
+    const ck=await fetch(`${SU}/rest/v1/loonars_siteplan?proyek=eq.${CP.id}&select=id&limit=1`,{headers:SH});
+    const existing=ck.ok?await ck.json():[];
+
+    if(existing&&existing.length>0){
+      // Update existing
+      await fetch(`${SU}/rest/v1/loonars_siteplan?proyek=eq.${CP.id}`,{
+        method:"PATCH",
+        headers:{...SH,"Prefer":"return=minimal"},
+        body:JSON.stringify({layout:SP_LAYOUT,updated_at:new Date().toISOString()})
+      });
+    }else{
+      // Insert baru
+      await fetch(`${SU}/rest/v1/loonars_siteplan`,{
+        method:"POST",
+        headers:{...SH,"Prefer":"return=minimal"},
+        body:JSON.stringify({proyek:CP.id,layout:SP_LAYOUT})
+      });
+    }
+    sN("✅ Siteplan berhasil disimpan!","success");
+    document.getElementById("oc").innerHTML=buildKelola();
+  }catch(e){sN("Gagal simpan: "+e.message,"error")}
+}
+
+// ── USERS ─────────────────────────────────────────────────────────
+async function loadAndRenderUsers(){
+  const oc=document.getElementById("oc");
+  oc.innerHTML=`<div style="text-align:center;padding:32px;color:var(--m)">⏳ Memuat users...</div>`;
+  let userList=[];
+  try{const r=await fetch(`${SU}/rest/v1/loonars_users?select=*&order=id.asc`,{headers:SH});if(r.ok)userList=await r.json()}catch{}
+  oc.innerHTML=`
+    <div class="sc">
+      <div class="sh">➕ Tambah User Baru</div>
+      <div class="fg2" style="margin-bottom:13px">
+        <div class="iw"><label class="il">Nama Lengkap</label><input class="inp" id="nun" placeholder="Nama marketing/owner"></div>
+        <div class="iw"><label class="il">Email</label><input class="inp" id="nue" type="email" placeholder="email@example.com"></div>
+        <div class="iw"><label class="il">Password</label><input class="inp" id="nup" type="password" placeholder="Min. 6 karakter"></div>
+        <div class="iw"><label class="il">Role</label>
+          <select class="inp" id="nur"><option value="sales">Sales</option><option value="owner">Owner</option></select>
+        </div>
+      </div>
+      <button class="btn bg" onclick="addUser()">+ Tambah User</button>
+    </div>
+    <div class="tw">
+      <div class="th"><div class="tt">User Loonars (${userList.length})</div></div>
+      <table><thead><tr><th>Nama</th><th>Email</th><th>Role</th><th>Aksi</th></tr></thead>
+      <tbody>${userList.map(u=>`<tr>
+        <td><strong>${u.nama||"—"}</strong></td>
+        <td style="font-size:11px">${u.email}</td>
+        <td><span class="bge bge-${u.role||"sales"}">${u.role||"—"}</span></td>
+        <td>
+          <button onclick="editUser(${u.id},'${u.nama?.replace(/'/g,"\\'")||""}','${u.email}','${u.role||"sales"}')" style="background:transparent;border:1px solid var(--b);color:var(--m);padding:3px 9px;border-radius:2px;cursor:pointer;font-size:10px;font-family:inherit;margin-right:3px">Edit</button>
+          <button onclick="deleteUser(${u.id},'${u.email}')" style="background:transparent;border:1px solid var(--r);color:var(--r);padding:3px 9px;border-radius:2px;cursor:pointer;font-size:10px;font-family:inherit">Hapus</button>
+        </td>
+      </tr>`).join("")||`<tr><td colspan="4" style="text-align:center;color:var(--m);padding:22px">Belum ada user</td></tr>`}
+      </tbody></table>
+    </div>`;
+}
+
+async function addUser(){
+  const n=(document.getElementById("nun")?.value||"").trim();
+  const e=(document.getElementById("nue")?.value||"").trim().toLowerCase();
+  const p=document.getElementById("nup")?.value||"";
+  const r=document.getElementById("nur")?.value||"sales";
+  if(!n||!e||!p){sN("Nama, email, password wajib","error");return}
+  if(p.length<6){sN("Password minimal 6 karakter","error");return}
+  try{
+    const res=await fetch(`${SU}/rest/v1/loonars_users`,{method:"POST",headers:{...SH,"Prefer":"return=minimal"},body:JSON.stringify({nama:n,email:e,password_hash:p,role:r})});
+    if(!res.ok)throw new Error(await res.text());
+    sN(`✅ User ${n} (${r}) berhasil ditambahkan!`,"success");
+    loadAndRenderUsers();
+  }catch(e){sN("Gagal: "+e.message,"error")}
+}
+
+function editUser(id,nama,email,role){
+  document.getElementById("mt2").textContent="Edit User";
+  document.getElementById("mbdy").innerHTML=`
+    <div class="fg2" style="gap:13px">
+      <div class="iw"><label class="il">Nama</label><input class="inp" id="eun" value="${nama}"></div>
+      <div class="iw"><label class="il">Email</label><input class="inp" id="eue" value="${email}"></div>
+      <div class="iw"><label class="il">Password Baru (kosongkan jika tidak diubah)</label><input class="inp" id="eup" type="password" placeholder="Isi jika ingin ganti"></div>
+      <div class="iw"><label class="il">Role</label>
+        <select class="inp" id="eur">
+          <option value="sales" ${role==="sales"?"selected":""}>Sales</option>
+          <option value="owner" ${role==="owner"?"selected":""}>Owner</option>
+        </select>
+      </div>
+    </div>`;
+  document.getElementById("mf2").innerHTML=`
+    <button class="btn bgh" onclick="closeModal()">Batal</button>
+    <button class="btn bg" onclick="doEditUser(${id})">💾 Simpan</button>`;
+  document.getElementById("mo").classList.add("op");
+}
+async function doEditUser(id){
+  const n=(document.getElementById("eun")?.value||"").trim();
+  const e=(document.getElementById("eue")?.value||"").trim();
+  const p=document.getElementById("eup")?.value||"";
+  const r=document.getElementById("eur")?.value||"sales";
+  const bd={nama:n,email:e,role:r};
+  if(p)bd.password_hash=p;
+  try{
+    const res=await fetch(`${SU}/rest/v1/loonars_users?id=eq.${id}`,{method:"PATCH",headers:{...SH,"Prefer":"return=minimal"},body:JSON.stringify(bd)});
+    if(!res.ok)throw new Error(await res.text());
+    sN("✅ User diperbarui","success");closeModal();loadAndRenderUsers();
+  }catch(e){sN("Gagal: "+e.message,"error")}
+}
+async function deleteUser(id,email){
+  if(!confirm(`Hapus user "${email}"?`))return;
+  try{
+    await fetch(`${SU}/rest/v1/loonars_users?id=eq.${id}`,{method:"DELETE",headers:SH});
+    sN("User dihapus","info");loadAndRenderUsers();
+  }catch(e){sN("Gagal: "+e.message,"error")}
+}
+
+// ── PRINT KWITANSI ────────────────────────────────────────────────
+function printKwt(){
+  const u=SL?UNITS[SL]:null;
+  if(!u||!u.buyer){sN("Simpan data terlebih dahulu","error");return}
+  const no=nKWT();
+  const am=u.type==="booking"?u.bf:u.type==="dp"?u.dp:u.price;
+  const tl=u.type==="booking"?"Booking Fee":u.type==="dp"?"Down Payment":"Akad/Pelunasan";
+  openPrint("Kwitansi",`<div style="font-family:'Times New Roman',serif;padding:32px;background:#fff;color:#111">
+    <div style="border-bottom:3px solid #8B4513;padding-bottom:13px;margin-bottom:16px;display:flex;align-items:center;gap:12px">
+      <div style="font-size:18px;font-weight:800;color:#8B4513;letter-spacing:2px;font-family:Arial">MAHAKARYA HALUOLEO</div>
+      <div style="margin-left:auto;text-align:right">
+        <div style="font-size:14px;font-weight:700;text-transform:uppercase">Kwitansi Pembayaran</div>
+        <div style="font-size:11px;color:#666">No. ${no}</div>
+      </div>
+    </div>
+    <table style="width:100%;font-size:12px;margin-bottom:14px">
+      <tr><td style="width:150px;color:#555;padding:2px 0">Tanggal</td><td>: ${fD(u.date)}</td></tr>
+      <tr><td style="color:#555;padding:2px 0">Diterima dari</td><td>: <strong>${u.buyer}</strong></td></tr>
+      <tr><td style="color:#555;padding:2px 0">NIK</td><td>: ${u.nik||"—"}</td></tr>
+      <tr><td style="color:#555;padding:2px 0">Untuk pembayaran</td><td>: ${tl} — Unit ${u.code} ${CP.nama}</td></tr>
+    </table>
+    <div style="background:#FFF8E1;border:1.5px dashed #C9A84C;border-radius:3px;padding:14px;text-align:center;margin-bottom:14px">
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:#888;margin-bottom:4px">Jumlah Pembayaran</div>
+      <div style="font-size:24px;font-weight:800;color:#8B4513;font-family:Arial">${fR(am)}</div>
+      <div style="font-size:11px;color:#666;font-style:italic;margin-top:3px">Terbilang: ${terbilang(am)} rupiah</div>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-top:28px">
+      <div style="text-align:center;min-width:130px">
+        <div style="height:50px;border-bottom:1px solid #333;margin-bottom:4px"></div>
+        <div style="font-size:10px;color:#555">Pembeli</div><div style="font-size:11px;font-weight:700">${u.buyer}</div>
+      </div>
+      <div style="text-align:center;min-width:130px">
+        <div style="height:50px;border-bottom:1px solid #333;margin-bottom:4px"></div>
+        <div style="font-size:10px;color:#555">Marketing</div><div style="font-size:11px;font-weight:700">${u.marketing||CU.nama}</div>
+      </div>
+      <div style="text-align:center;min-width:130px">
+        <div style="height:50px;border-bottom:1px solid #333;margin-bottom:4px"></div>
+        <div style="font-size:10px;color:#555">Direktur Utama</div><div style="font-size:11px;font-weight:700">Avianto Perdana Pagala</div>
+      </div>
+    </div>
+  </div>`);
+}
+
+// ── PRINT SPI ─────────────────────────────────────────────────────
+function printSPI(){
+  const u=SL?UNITS[SL]:null;
+  if(!u||!u.buyer){sN("Simpan data terlebih dahulu","error");return}
+  const sn=u.spiNo||nSPI();
+  openPrint("Surat Perjanjian Investasi",`<div style="font-family:'Times New Roman',serif;background:#fff;color:#111;padding:32px;line-height:1.7;font-size:12px">
+    <div style="display:flex;align-items:center;border-bottom:2px solid #111;padding-bottom:12px;margin-bottom:18px">
+      <div style="font-size:16px;font-weight:700;letter-spacing:2px;font-family:Arial">MAHAKARYA HALUOLEO</div>
+      <div style="margin-left:16px;padding-left:16px;border-left:1px solid #ccc;font-size:10px;color:#333;font-family:Arial;line-height:1.8">
+        ${CP.lokasi||"Jl. Baru Mulungan, Sendangadi, Sleman"}<br/>
+        📞 +62 822-2888-5223 · ✉ loonarsliving@gmail.com
+      </div>
+    </div>
+    <div style="text-align:center;font-weight:700;font-size:15px;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">SURAT PERJANJIAN INVESTASI</div>
+    <div style="text-align:center;font-size:12px;margin-bottom:18px">ANTARA<br><strong>PT. MAHA KARYA HALUOLEO</strong><br>DENGAN<br><strong>${u.buyer.toUpperCase()}</strong></div>
+    <p style="text-align:justify;margin-bottom:11px">Pada hari ${gD(u.date||td())} tanggal ${fD(u.date||td())}, kami yang bertanda tangan di bawah ini:</p>
+    <table style="width:100%;font-size:12px;margin-bottom:10px">
+      <tr><td style="width:170px">1. Nama Penandatangan</td><td style="width:12px">:</td><td><strong>Avianto Perdana Pagala</strong></td></tr>
+      <tr><td style="padding-left:16px">Jabatan</td><td>:</td><td>Direktur Utama</td></tr>
+      <tr><td style="padding-left:16px">Perusahaan</td><td>:</td><td>PT. MAHA KARYA HALUOLEO</td></tr>
+      <tr><td colspan="3" style="padding:4px 0"><em>selanjutnya disebut <strong>PIHAK PERTAMA</strong></em></td></tr>
+      <tr><td style="padding-top:8px">2. Nama</td><td style="padding-top:8px">:</td><td style="padding-top:8px"><strong>${u.buyer}</strong></td></tr>
+      <tr><td style="padding-left:16px">NIK</td><td>:</td><td>${u.nik||"—"}</td></tr>
+      <tr><td style="padding-left:16px">Telepon</td><td>:</td><td>${u.phone||"—"}</td></tr>
+      <tr><td style="padding-left:16px">Alamat</td><td>:</td><td>${u.address||"—"}</td></tr>
+      <tr><td colspan="3" style="padding:4px 0"><em>selanjutnya disebut <strong>PIHAK KEDUA</strong></em></td></tr>
+    </table>
+    <div style="text-align:center;font-weight:700;font-size:13px;text-decoration:underline;margin:14px 0 7px;text-transform:uppercase">PASAL 1 — OBJEK INVESTASI</div>
+    <p style="margin-bottom:10px">Objek investasi adalah <strong>${CP.nama} — Unit ${u.code}</strong> yang berlokasi di ${CP.lokasi||"—"}.</p>
+    <div style="text-align:center;font-weight:700;font-size:13px;text-decoration:underline;margin:14px 0 7px;text-transform:uppercase">PASAL 5 — HARGA DAN CARA PEMBAYARAN</div>
+    <ol style="margin:0 0 10px 18px;font-size:12px">
+      <li>Harga investasi <strong>${fR(u.price)},00 (<em>${terbilang(u.price)} rupiah</em>)</strong>;</li>
+      <li style="margin-top:4px">Cara pembayaran:<ol type="a" style="margin:4px 0 0 18px">
+        <li>Booking Fee: <strong>${fR(u.bf)},00</strong></li>
+        <li>Down Payment: <strong>${fR(u.dp)},00</strong></li>
+        <li>Pelunasan: <strong>${fR(u.pel)},00</strong></li>
+      </ol></li>
+    </ol>
+    <div style="display:flex;justify-content:space-between;margin-top:36px">
+      <div style="text-align:center;min-width:140px"><div style="font-size:11px;font-weight:700;margin-bottom:3px">PIHAK PERTAMA</div><div style="height:60px;border-bottom:1px solid #333;margin-bottom:4px"></div><div style="font-weight:700;font-size:12px">Avianto Perdana Pagala</div><div style="font-size:11px;color:#555">Direktur Utama</div></div>
+      <div style="text-align:center;min-width:140px"><div style="font-size:11px;font-weight:700;margin-bottom:3px">PIHAK KEDUA</div><div style="height:60px;border-bottom:1px solid #333;margin-bottom:4px"></div><div style="font-weight:700;font-size:12px">${u.buyer}</div></div>
+    </div>
+    <div style="margin-top:16px;font-size:11px;color:#333">Nomor: ${sn}/Draft/${gR(u.date||td())}/2026</div>
+  </div>`);
+}
+
+function openPrint(title,html){
+  document.getElementById("mt2").textContent=title;
+  document.getElementById("mbdy").innerHTML=html;
+  window._printHTML=html;
+  document.getElementById("mf2").innerHTML=`
+    <button class="btn bgh" onclick="closeModal()">Tutup</button>
+    <button class="btn bg" onclick="doPrint()">🖨️ Cetak / PDF</button>`;
+  document.getElementById("mo").classList.add("op");
+}
+function doPrint(){
+  const w=window.open("","_blank","width=900,height=700");
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{margin:20px;background:#fff}@media print{body{margin:0}}</style></head><body>${window._printHTML}</body></html>`);
+  w.document.close();
+  setTimeout(()=>w.print(),800);
+}
+</script>
+</body>
+</html>
