@@ -281,6 +281,31 @@ function terbilang(n){
 }
 
 // ── LOGIN ─────────────────────────────────────────────────────────
+// Langkah 2-3 dipakai bersama oleh login manual (doLogin) dan SSO (trySSO):
+// cek karyawan masih aktif/disetujui di MKHsistem, lalu cocokkan role/akses
+// dari tabel loonars_users berdasarkan email. Melempar Error dengan pesan
+// yang bisa langsung ditampilkan ke user jika gagal.
+async function finishLogin(em,mkhToken,mkhUid){
+  const empR=await fetch(`${MKH_URL}/rest/v1/employees?id=eq.${mkhUid}&select=id,full_name,phone,is_active,approval_status,employment_status`,{
+    headers:{"apikey":MKH_KEY,"Authorization":"Bearer "+mkhToken}
+  });
+  const empRows=empR.ok?await empR.json():[];
+  const emp=empRows[0];
+  if(!emp||!emp.is_active||emp.approval_status!=="approved"||emp.employment_status!=="active"){
+    throw new Error("Akun MKHsistem tidak aktif/disetujui. Hubungi admin.");
+  }
+
+  const luR=await fetch(`${SU}/rest/v1/loonars_users?email=eq.${encodeURIComponent(em)}&select=*`,{headers:SH});
+  const luRows=luR.ok?await luR.json():[];
+  if(!luRows.length){throw new Error("Akun MKHsistem valid, tapi belum terdaftar di loonars-sales. Hubungi owner.")}
+  const lu=luRows[0];
+  CU={email:em,nama:emp.full_name||lu.nama||em,role:(lu.role||"sales").toLowerCase(),id:lu.id,phone:emp.phone||""};
+  document.getElementById("tu").textContent=CU.nama+" ("+CU.role+")";
+  document.getElementById("Lv").style.display="none";
+  await loadAllProjects();
+  showPicker();
+}
+
 async function doLogin(){
   const em=document.getElementById("le").value.trim().toLowerCase();
   const pw=document.getElementById("lp").value;
@@ -303,31 +328,38 @@ async function doLogin(){
       er.textContent="⚠ "+(authD.error_description||authD.msg||"Email atau password MKHsistem salah");
       er.style.display="block";return;
     }
-    const mkhToken=authD.access_token, mkhUid=authD.user?.id;
-
-    // 2. Pastikan karyawan ini masih aktif & disetujui di MKHsistem.
-    const empR=await fetch(`${MKH_URL}/rest/v1/employees?id=eq.${mkhUid}&select=id,full_name,phone,is_active,approval_status,employment_status`,{
-      headers:{"apikey":MKH_KEY,"Authorization":"Bearer "+mkhToken}
-    });
-    const empRows=empR.ok?await empR.json():[];
-    const emp=empRows[0];
-    if(!emp||!emp.is_active||emp.approval_status!=="approved"||emp.employment_status!=="active"){
-      er.textContent="⚠ Akun MKHsistem tidak aktif/disetujui. Hubungi admin.";er.style.display="block";return;
-    }
-
-    // 3. Role & akses proyek tetap dari loonars_users (dicocokkan by email).
-    const luR=await fetch(`${SU}/rest/v1/loonars_users?email=eq.${encodeURIComponent(em)}&select=*`,{headers:SH});
-    const luRows=luR.ok?await luR.json():[];
-    if(!luRows.length){er.textContent="⚠ Akun MKHsistem valid, tapi belum terdaftar di loonars-sales. Hubungi owner.";er.style.display="block";return}
-    const lu=luRows[0];
-    CU={email:em,nama:emp.full_name||lu.nama||em,role:(lu.role||"sales").toLowerCase(),id:lu.id,phone:emp.phone||""};
-    document.getElementById("tu").textContent=CU.nama+" ("+CU.role+")";
-    document.getElementById("Lv").style.display="none";
-    await loadAllProjects();
-    showPicker();
-  }catch(e){er.textContent="⚠ Gagal: "+e.message;er.style.display="block"}
+    await finishLogin(em,authD.access_token,authD.user?.id);
+  }catch(e){er.textContent="⚠ "+(e.message||"Gagal login");er.style.display="block"}
   finally{ld.style.display="none";document.getElementById("lbtn").disabled=false}
 }
+
+// ── SSO dari MKHsistem ───────────────────────────────────────────
+// MKHsistem mengarahkan ke /?token=<access_token JWT Supabase user MKHsistem>.
+// Token divalidasi ke endpoint auth MKHsistem sendiri (bukan project Supabase
+// loonars-sales) untuk mendapatkan email, lalu lanjut ke alur yang sama
+// dengan login manual (finishLogin). Token dibuang dari URL segera agar
+// tidak tertinggal di history/referrer.
+async function trySSO(){
+  const qs=new URLSearchParams(location.search);
+  const token=qs.get("token");
+  if(!token)return;
+  history.replaceState(null,"",location.pathname);
+  const er=document.getElementById("lerr");
+  const ld=document.getElementById("lld");
+  er.style.display="none";
+  ld.style.display="block";
+  try{
+    const uR=await fetch(`${MKH_URL}/auth/v1/user`,{headers:{"apikey":MKH_KEY,"Authorization":"Bearer "+token}});
+    if(!uR.ok)throw new Error("Sesi SSO tidak valid/kedaluwarsa, silakan login manual.");
+    const uD=await uR.json();
+    const em=(uD.email||"").trim().toLowerCase();
+    const mkhUid=uD.id;
+    if(!em||!mkhUid)throw new Error("Sesi SSO tidak lengkap, silakan login manual.");
+    await finishLogin(em,token,mkhUid);
+  }catch(e){er.textContent="⚠ "+(e.message||"Gagal SSO");er.style.display="block"}
+  finally{ld.style.display="none"}
+}
+trySSO();
 
 function doLogout(){
   CU=null;CP=null;SL=null;CT="";OT="summary";
