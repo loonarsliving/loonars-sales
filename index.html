@@ -69,6 +69,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--d);color:var(--t);min-hei
 .uc.av{background:#0D1F0D;border-color:#1E4A1E;color:#4CAF50}
 .uc.sd{background:#1F0A08;border-color:#5C1A14;color:#E57373;cursor:default}
 .uc.hd{background:#0A1A2A;border-color:#1a4060;color:#5DADE2;cursor:default}
+.uc.pv{background:#2A1A00;border-color:#8a5a10;color:#E5A93E;cursor:default}
 .uc.sl{background:#2A1E00;border-color:var(--g);color:var(--g);box-shadow:0 0 14px rgba(201,168,76,.3)}
 .uc:hover.av{transform:translateY(-2px);box-shadow:0 5px 18px rgba(0,0,0,.4)}
 .uco{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:700;letter-spacing:1px;line-height:1}
@@ -120,6 +121,7 @@ tr:hover td{background:rgba(201,168,76,.03)}
 .bge-sold{background:rgba(192,57,43,.2);color:#E57373}
 .bge-hold,.bge-booking,.bge-dp{background:rgba(41,128,185,.2);color:#5DADE2}
 .bge-available{background:rgba(39,174,96,.2);color:#58D68D}
+.bge-pending_verification{background:rgba(230,169,62,.2);color:#E5A93E}
 .bge-akad{background:rgba(211,84,0,.2);color:#F0B27A}
 .bge-pending{background:rgba(211,84,0,.2);color:#F0B27A}
 .bge-approved{background:rgba(39,174,96,.2);color:#58D68D}
@@ -442,7 +444,7 @@ async function loadProjectData(){
       ASET_DB.forEach(row=>{
         const c=row.blok;if(!c)return;
         UNITS[c]=mkU(c);
-        UNITS[c].status=row.status==="terjual"?"sold":row.status==="dp"?"hold":"available";
+        UNITS[c].status=row.status==="terjual"?"sold":row.status==="verifikasi"?"pending_verification":row.status==="dp"?"hold":"available";
         UNITS[c].buyer=row.pembeli||"";
         UNITS[c].price=parseFloat(row.harga)||0;
         UNITS[c].date=row.tgl_jual||"";
@@ -469,12 +471,15 @@ async function loadProjectData(){
 }
 
 // ── SAVE UNIT KE DB ───────────────────────────────────────────────
+// Sales tidak lagi menandai unit "terjual" atau posting jurnal cash-in dari
+// sini secara langsung — status "verifikasi" memicu sync ke MKHsistem
+// (aset.status="verifikasi" -> loonars_closing_declared), dan baru setelah
+// finance MKHsistem memverifikasi dananya, unit ditandai "terjual" +
+// jurnal cash-in dibuat oleh MKH Property (lihat migration 0011).
 async function saveUnitDB(u){
-  // BUG FIX: status mapping yang benar
-  // booking/hold → "dp" di DB, akad/sold → "terjual" di DB, available → "tersedia"
-  const statusMap={sold:"terjual",hold:"dp",available:"tersedia"};
+  const statusMap={sold:"terjual",hold:"dp",pending_verification:"verifikasi",available:"tersedia"};
   const dbStatus=statusMap[u.status]||"tersedia";
-  const extra=JSON.stringify({nik:u.nik,phone:u.phone,address:u.address,type:u.type,spiNo:u.spiNo,marketing:u.marketing,bf:u.bf,dp:u.dp,pel:u.pel,handover:u.handover});
+  const extra=JSON.stringify({nik:u.nik,phone:u.phone,address:u.address,type:u.type,spiNo:u.spiNo,marketing:u.marketing,marketingEmail:CU?.email||"",bf:u.bf,dp:u.dp,pel:u.pel,handover:u.handover});
   const payload={status:dbStatus,pembeli:u.buyer,tgl_jual:u.date,harga:u.price,ket:extra};
 
   try{
@@ -496,15 +501,6 @@ async function saveUnitDB(u){
         await fetch(`${SU}/rest/v1/aset`,{method:"POST",headers:{...SH,"Prefer":"return=minimal"},body:JSON.stringify({proyek:CP.id,tipe:"Unit",blok:u.code,luas:0,harga:u.price,...payload})});
       }
     }
-    // Catat ke jurnal jika akad/terjual
-    if(u.status==="sold"){
-      const jno=CP.id+"-"+u.code+"-"+Date.now().toString().slice(-5);
-      const jket=`Penjualan ${CP.nama} Unit ${u.code} — ${u.buyer}`;
-      await fetch(`${SU}/rest/v1/jurnal`,{method:"POST",headers:{...SH,"Prefer":"return=minimal"},body:JSON.stringify([
-        {tgl:u.date||td(),no:jno,ket:jket,akun:"1-1001",nama:"Kas Tunai",proyek:CP.id,d:u.price,k:0},
-        {tgl:u.date||td(),no:jno,ket:jket,akun:"4-1001",nama:"Penjualan",proyek:CP.id,d:0,k:u.price},
-      ])});
-    }
     return true;
   }catch(e){console.warn("saveUnitDB:",e);return false}
 }
@@ -525,8 +521,8 @@ function buildSiteplanHTML(interactive){
     (row.units||[]).forEach(code=>{
       const u=UNITS[code]||mkU(code);
       const isSel=code===SL;
-      const cls=isSel?"sl":u.status==="sold"?"sd":u.status==="hold"?"hd":"av";
-      const lbl=u.status==="sold"?"SOLD":u.status==="hold"?"HOLD":"AV";
+      const cls=isSel?"sl":u.status==="sold"?"sd":u.status==="pending_verification"?"pv":u.status==="hold"?"hd":"av";
+      const lbl=u.status==="sold"?"SOLD":u.status==="pending_verification"?"VERIFIKASI":u.status==="hold"?"HOLD":"AV";
       // Sales: available → pickU, sold/hold → unitDetail
       // Owner: semua → owDetail
       let clickFn;
@@ -556,6 +552,7 @@ function renderSales(){
         <div class="li"><div class="ld2" style="background:#0D1F0D;border:1px solid #27AE60"></div>Tersedia</div>
         <div class="li"><div class="ld2" style="background:#1F0A08;border:1px solid #C0392B"></div>Sold</div>
         <div class="li"><div class="ld2" style="background:#0A1A2A;border:1px solid #2980B9"></div>Hold/DP</div>
+        <div class="li"><div class="ld2" style="background:#2A1A00;border:1px solid #8a5a10"></div>Menunggu Verifikasi</div>
         <div class="li"><div class="ld2" style="background:#2A1E00;border:1px solid var(--g)"></div>Dipilih</div>
       </div>
       <div class="spc">${buildSiteplanHTML(true)}</div>
@@ -615,13 +612,8 @@ function buildInputPanel(){
     </div>
     <div class="iw" style="margin-bottom:14px"><label class="il">Alamat KTP</label><input class="inp" id="fa" placeholder="Alamat lengkap sesuai KTP" value="${u.address||""}"></div>
     ${nominalFields}
-    <div class="fg2" style="margin-bottom:14px">
-      <div class="iw"><label class="il">Nomor HP Marketing (wajib untuk ajukan fee)</label><input class="inp" id="fmp" placeholder="08xxxxxxxxxx" value="${u.feePhone||CU?.phone||""}"></div>
-      <div class="iw"><label class="il">Nominal Fee Diajukan (Rp)</label><div class="pw"><span class="pp">Rp</span><input class="inp" id="ffee" type="number" placeholder="0" value="${u.feeAmount||""}"></div></div>
-    </div>
     <div class="ar">
-      <button class="btn bg" onclick="doSaveUnit()">💾 Simpan</button>
-      <button class="btn bfe" onclick="doAjukanFee()">🚀 Ajukan Fee</button>
+      <button class="btn bg" onclick="doSaveUnit()">💾 Simpan — Kirim ke Verifikasi</button>
       <button class="btn bgh" onclick="clearSel()">✕ Batal</button>
     </div>`:`<div class="em" style="padding:20px"><div style="font-size:13px;color:var(--m)">Pilih jenis transaksi di atas untuk melanjutkan</div></div>`}
   </div>`;
@@ -658,24 +650,21 @@ async function doSaveUnit(){
   if(!u.spiNo)u.spiNo=nSPI();
   UNITS[SL]=u;
 
-  // BUG FIX: status yang benar
-  // booking → hold (sudah dipesannya, tapi belum DP)
-  // dp → hold (sudah DP, tapi belum akad)
-  // akad → sold (sudah lunas/akad)
-  u.status=t==="akad"?"sold":"hold";
+  // Closing tidak lagi langsung "sold" — menunggu finance MKHsistem
+  // memverifikasi dana sebelum unit ditandai terjual (lihat trySSO-era
+  // redesign: aset.status="verifikasi" memicu sync ke MKHsistem).
+  u.status="pending_verification";
 
   const ok=await saveUnitDB(u);
 
-  if(u.status==="sold"||u.status==="hold"){
-    await tgSend(`💰 <b>UNIT ${u.code} ${u.status==="sold"?"TERJUAL/AKAD":"BOOKING/DP"}</b>\n\n🏠 Project: <b>${CP.nama}</b>\n👤 Pembeli: <b>${u.buyer}</b>\n💼 Jenis: <b>${t==="booking"?"Booking Fee":t==="dp"?"Down Payment":"Akad/Lunas"}</b>\n💰 Nilai: <b>${fR(u.price)}</b>\n📱 Marketing: <b>${CU.nama}</b>`);
-  }
-  sN(`✅ Unit ${SL} disimpan${ok?" & sync DB":""}!`,"success");
+  await tgSend(`📤 <b>UNIT ${u.code} MENUNGGU VERIFIKASI</b>\n\n🏠 Project: <b>${CP.nama}</b>\n👤 Pembeli: <b>${u.buyer}</b>\n💼 Jenis: <b>${t==="booking"?"Booking Fee":t==="dp"?"Down Payment":"Akad/Lunas"}</b>\n💰 Nilai: <b>${fR(u.price)}</b>\n📱 Marketing: <b>${CU.nama}</b>`);
+  sN(`✅ Unit ${SL} dikirim ke verifikasi MKHsistem${ok?" & sync DB":""}!`,"success");
   renderSales();
 }
 
 function unitDetail(c){
   const u=UNITS[c]||mkU(c);
-  document.getElementById("mt2").textContent=`Unit ${c} — ${u.status==="sold"?"TERJUAL":u.status==="hold"?"HOLD/DP":"—"}`;
+  document.getElementById("mt2").textContent=`Unit ${c} — ${u.status==="sold"?"TERJUAL":u.status==="pending_verification"?"MENUNGGU VERIFIKASI":u.status==="hold"?"HOLD/DP":"—"}`;
   document.getElementById("mbdy").innerHTML=`
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:13px">
       ${[["Pembeli",`<strong>${u.buyer||"—"}</strong>`],["NIK",u.nik||"—"],["Telepon",u.phone||"—"],
@@ -696,39 +685,6 @@ function unitDetail(c){
   document.getElementById("mo").classList.add("op");
 }
 function editUnit(c){SL=c;CT=UNITS[c]?.type||"";renderSales();setTimeout(()=>document.getElementById("ip")?.scrollIntoView({behavior:"smooth",block:"start"}),80)}
-
-function normPhoneID(raw){
-  let d=(raw||"").replace(/[^0-9]/g,"");
-  if(d.startsWith("62"))d="0"+d.slice(2);
-  if(!d.startsWith("0"))d="0"+d;
-  return d;
-}
-function isValidPhoneID(raw){
-  const d=normPhoneID(raw);
-  return /^08[0-9]{7,12}$/.test(d);
-}
-
-async function doAjukanFee(){
-  const u=SL?UNITS[SL]:null;
-  if(!u||!u.buyer){sN("Simpan data unit terlebih dahulu","error");return}
-  if(!u.type||!u.price){sN("Lengkapi jenis & harga transaksi dahulu","error");return}
-  if(FEES.find(f=>f.unit===u.code&&f.proyek===CP.id&&f.status==="pending")){sN("Pengajuan fee sudah ada (pending)","error");return}
-  const feePhoneRaw=(document.getElementById("fmp")?.value||"").trim();
-  if(!feePhoneRaw){sN("Nomor HP marketing wajib diisi untuk mengajukan fee","error");return}
-  if(!isValidPhoneID(feePhoneRaw)){sN("Format nomor HP marketing tidak valid","error");return}
-  const feeAmount=parseInt(document.getElementById("ffee")?.value||0);
-  if(!feeAmount){sN("Nominal fee wajib diisi","error");return}
-  const feePhone=normPhoneID(feePhoneRaw);
-  u.feePhone=feePhoneRaw;u.feeAmount=feeAmount;
-
-  const fe={unit:u.code,proyek:CP.id,marketing:CU.nama,buyer:u.buyer,type:u.type,price:u.price,date:td(),status:"pending",phone:feePhone,fee_amount:feeAmount};
-  try{
-    const r=await fetch(`${SU}/rest/v1/loonars_fee`,{method:"POST",headers:{...SH,"Prefer":"return=representation"},body:JSON.stringify(fe)});
-    if(r.ok){const rows=await r.json();FEES.unshift(...rows)}
-  }catch{}
-  await tgSend(`🚀 <b>PENGAJUAN FEE BARU</b>\n\n🏠 Project: <b>${CP.nama}</b>\n🏠 Unit: <b>${u.code}</b>\n👤 Pembeli: <b>${u.buyer}</b>\n💼 Jenis: <b>${u.type}</b>\n💰 Nilai Unit: <b>${fR(u.price)}</b>\n💵 Nominal Fee: <b>${fR(feeAmount)}</b>\n📱 Marketing: <b>${CU.nama}</b> (${feePhone})`);
-  sN("🚀 Pengajuan fee dikirim ke owner & superadmin (WA)!","success");
-}
 
 // ── OWNER RENDER ──────────────────────────────────────────────────
 function renderOwner(){
