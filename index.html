@@ -286,12 +286,11 @@ async function doLogin(){
   ld.style.display="block";
   document.getElementById("lbtn").disabled=true;
   try{
-    const r=await fetch(`${SU}/rest/v1/loonars_users?email=eq.${encodeURIComponent(em)}&select=*`,{headers:SH});
+    const r=await fetch(`${SU}/rest/v1/rpc/loonars_login`,{method:"POST",headers:SH,body:JSON.stringify({p_email:em,p_password:pw})});
     if(!r.ok)throw new Error("Koneksi gagal");
-    const rows=await r.json();
-    if(!rows.length){er.textContent="⚠ Email tidak terdaftar";er.style.display="block";return}
-    const u=rows[0];
-    if(u.password_hash!==pw){er.textContent="⚠ Password salah";er.style.display="block";return}
+    const res=await r.json();
+    if(!res.ok){er.textContent="⚠ "+(res.error||"Login gagal");er.style.display="block";return}
+    const u=res.user;
     CU={email:u.email,nama:u.nama||u.email,role:(u.role||"sales").toLowerCase(),id:u.id};
     document.getElementById("tu").textContent=CU.nama+" ("+CU.role+")";
     document.getElementById("Lv").style.display="none";
@@ -555,6 +554,10 @@ function buildInputPanel(){
     </div>
     <div class="iw" style="margin-bottom:14px"><label class="il">Alamat KTP</label><input class="inp" id="fa" placeholder="Alamat lengkap sesuai KTP" value="${u.address||""}"></div>
     ${nominalFields}
+    <div class="fg2" style="margin-bottom:14px">
+      <div class="iw"><label class="il">Nomor HP Marketing (wajib untuk ajukan fee)</label><input class="inp" id="fmp" placeholder="08xxxxxxxxxx" value="${u.feePhone||""}"></div>
+      <div class="iw"><label class="il">Nominal Fee Diajukan (Rp)</label><div class="pw"><span class="pp">Rp</span><input class="inp" id="ffee" type="number" placeholder="0" value="${u.feeAmount||""}"></div></div>
+    </div>
     <div class="ar">
       <button class="btn bg" onclick="doSaveUnit()">💾 Simpan</button>
       <button class="btn bfe" onclick="doAjukanFee()">🚀 Ajukan Fee</button>
@@ -633,18 +636,37 @@ function unitDetail(c){
 }
 function editUnit(c){SL=c;CT=UNITS[c]?.type||"";renderSales();setTimeout(()=>document.getElementById("ip")?.scrollIntoView({behavior:"smooth",block:"start"}),80)}
 
+function normPhoneID(raw){
+  let d=(raw||"").replace(/[^0-9]/g,"");
+  if(d.startsWith("62"))d="0"+d.slice(2);
+  if(!d.startsWith("0"))d="0"+d;
+  return d;
+}
+function isValidPhoneID(raw){
+  const d=normPhoneID(raw);
+  return /^08[0-9]{7,12}$/.test(d);
+}
+
 async function doAjukanFee(){
   const u=SL?UNITS[SL]:null;
   if(!u||!u.buyer){sN("Simpan data unit terlebih dahulu","error");return}
   if(!u.type||!u.price){sN("Lengkapi jenis & harga transaksi dahulu","error");return}
   if(FEES.find(f=>f.unit===u.code&&f.proyek===CP.id&&f.status==="pending")){sN("Pengajuan fee sudah ada (pending)","error");return}
-  const fe={unit:u.code,proyek:CP.id,marketing:CU.nama,buyer:u.buyer,type:u.type,price:u.price,date:td(),status:"pending"};
+  const feePhoneRaw=(document.getElementById("fmp")?.value||"").trim();
+  if(!feePhoneRaw){sN("Nomor HP marketing wajib diisi untuk mengajukan fee","error");return}
+  if(!isValidPhoneID(feePhoneRaw)){sN("Format nomor HP marketing tidak valid","error");return}
+  const feeAmount=parseInt(document.getElementById("ffee")?.value||0);
+  if(!feeAmount){sN("Nominal fee wajib diisi","error");return}
+  const feePhone=normPhoneID(feePhoneRaw);
+  u.feePhone=feePhoneRaw;u.feeAmount=feeAmount;
+
+  const fe={unit:u.code,proyek:CP.id,marketing:CU.nama,buyer:u.buyer,type:u.type,price:u.price,date:td(),status:"pending",phone:feePhone,fee_amount:feeAmount};
   try{
     const r=await fetch(`${SU}/rest/v1/loonars_fee`,{method:"POST",headers:{...SH,"Prefer":"return=representation"},body:JSON.stringify(fe)});
     if(r.ok){const rows=await r.json();FEES.unshift(...rows)}
   }catch{}
-  await tgSend(`🚀 <b>PENGAJUAN FEE BARU</b>\n\n🏠 Project: <b>${CP.nama}</b>\n🏠 Unit: <b>${u.code}</b>\n👤 Pembeli: <b>${u.buyer}</b>\n💼 Jenis: <b>${u.type}</b>\n💰 Nilai: <b>${fR(u.price)}</b>\n📱 Marketing: <b>${CU.nama}</b>`);
-  sN("🚀 Pengajuan fee dikirim ke owner!","success");
+  await tgSend(`🚀 <b>PENGAJUAN FEE BARU</b>\n\n🏠 Project: <b>${CP.nama}</b>\n🏠 Unit: <b>${u.code}</b>\n👤 Pembeli: <b>${u.buyer}</b>\n💼 Jenis: <b>${u.type}</b>\n💰 Nilai Unit: <b>${fR(u.price)}</b>\n💵 Nominal Fee: <b>${fR(feeAmount)}</b>\n📱 Marketing: <b>${CU.nama}</b> (${feePhone})`);
+  sN("🚀 Pengajuan fee dikirim ke owner & superadmin (WA)!","success");
 }
 
 // ── OWNER RENDER ──────────────────────────────────────────────────
