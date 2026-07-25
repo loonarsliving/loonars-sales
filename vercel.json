@@ -1,5 +1,6 @@
 {
   "rewrites": [
-    { "source": "/cek-unit", "destination": "/cek-unit.html" }
+    { "source": "/cek-unit", "destination": "/cek-unit.html" },
+    { "source": "/sso", "destination": "/index.html" }
   ]
 }
