@@ -213,6 +213,11 @@ tr:hover td{background:rgba(201,168,76,.03)}
 const SU="https://gluoioiimapyhchdasfl.supabase.co";
 const SK="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdsdW9pb2lpbWFweWhjaGRhc2ZsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwNDQ3MjAsImV4cCI6MjA5NTYyMDcyMH0.dHVB0jJBMjUunJKSsqbaM3MGCAq-ZRSWQEqvEyUjIyk";
 const SH={"Content-Type":"application/json","apikey":SK,"Authorization":"Bearer "+SK};
+// MKHsistem (MK Connect) — separate Supabase project, used only to verify
+// login credentials against the employee's real MKHsistem account. Never
+// used for reads/writes on this app's own data (that stays on SU/SK above).
+const MKH_URL="https://svcmybsziaelwwdrnzcv.supabase.co";
+const MKH_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2Y215YnN6aWFlbHd3ZHJuemN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyODExNzEsImV4cCI6MjA5Njg1NzE3MX0.Ds4cdAthZndisUoB4CRq1Ckc4F59TKE_n1QjxlfDEiA";
 const TG_TOKEN="8972034832:AAGCLi9HuGbmzC9O13wH9X8YxVTPG6kMQr8";
 const TG_CHAT="-5180682189";
 
@@ -286,12 +291,36 @@ async function doLogin(){
   ld.style.display="block";
   document.getElementById("lbtn").disabled=true;
   try{
-    const r=await fetch(`${SU}/rest/v1/rpc/loonars_login`,{method:"POST",headers:SH,body:JSON.stringify({p_email:em,p_password:pw})});
-    if(!r.ok)throw new Error("Koneksi gagal");
-    const res=await r.json();
-    if(!res.ok){er.textContent="⚠ "+(res.error||"Login gagal");er.style.display="block";return}
-    const u=res.user;
-    CU={email:u.email,nama:u.nama||u.email,role:(u.role||"sales").toLowerCase(),id:u.id};
+    // 1. Verifikasi kredensial ke akun MKHsistem (MK Connect) — bukan lagi
+    //    tabel loonars_users sendiri.
+    const authR=await fetch(`${MKH_URL}/auth/v1/token?grant_type=password`,{
+      method:"POST",
+      headers:{"Content-Type":"application/json","apikey":MKH_KEY},
+      body:JSON.stringify({email:em,password:pw})
+    });
+    const authD=await authR.json().catch(()=>({}));
+    if(!authR.ok||!authD.access_token){
+      er.textContent="⚠ "+(authD.error_description||authD.msg||"Email atau password MKHsistem salah");
+      er.style.display="block";return;
+    }
+    const mkhToken=authD.access_token, mkhUid=authD.user?.id;
+
+    // 2. Pastikan karyawan ini masih aktif & disetujui di MKHsistem.
+    const empR=await fetch(`${MKH_URL}/rest/v1/employees?id=eq.${mkhUid}&select=id,full_name,phone,is_active,approval_status,employment_status`,{
+      headers:{"apikey":MKH_KEY,"Authorization":"Bearer "+mkhToken}
+    });
+    const empRows=empR.ok?await empR.json():[];
+    const emp=empRows[0];
+    if(!emp||!emp.is_active||emp.approval_status!=="approved"||emp.employment_status!=="active"){
+      er.textContent="⚠ Akun MKHsistem tidak aktif/disetujui. Hubungi admin.";er.style.display="block";return;
+    }
+
+    // 3. Role & akses proyek tetap dari loonars_users (dicocokkan by email).
+    const luR=await fetch(`${SU}/rest/v1/loonars_users?email=eq.${encodeURIComponent(em)}&select=*`,{headers:SH});
+    const luRows=luR.ok?await luR.json():[];
+    if(!luRows.length){er.textContent="⚠ Akun MKHsistem valid, tapi belum terdaftar di loonars-sales. Hubungi owner.";er.style.display="block";return}
+    const lu=luRows[0];
+    CU={email:em,nama:emp.full_name||lu.nama||em,role:(lu.role||"sales").toLowerCase(),id:lu.id,phone:emp.phone||""};
     document.getElementById("tu").textContent=CU.nama+" ("+CU.role+")";
     document.getElementById("Lv").style.display="none";
     await loadAllProjects();
@@ -555,7 +584,7 @@ function buildInputPanel(){
     <div class="iw" style="margin-bottom:14px"><label class="il">Alamat KTP</label><input class="inp" id="fa" placeholder="Alamat lengkap sesuai KTP" value="${u.address||""}"></div>
     ${nominalFields}
     <div class="fg2" style="margin-bottom:14px">
-      <div class="iw"><label class="il">Nomor HP Marketing (wajib untuk ajukan fee)</label><input class="inp" id="fmp" placeholder="08xxxxxxxxxx" value="${u.feePhone||""}"></div>
+      <div class="iw"><label class="il">Nomor HP Marketing (wajib untuk ajukan fee)</label><input class="inp" id="fmp" placeholder="08xxxxxxxxxx" value="${u.feePhone||CU?.phone||""}"></div>
       <div class="iw"><label class="il">Nominal Fee Diajukan (Rp)</label><div class="pw"><span class="pp">Rp</span><input class="inp" id="ffee" type="number" placeholder="0" value="${u.feeAmount||""}"></div></div>
     </div>
     <div class="ar">
