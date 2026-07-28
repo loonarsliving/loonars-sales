@@ -763,24 +763,18 @@ function buildOwnerFee(){
   const fees=FEES.filter(f=>!f.proyek||f.proyek===CP.id);
   if(!fees.length)return`<div class="sc"><div class="em"><div style="font-size:32px">💸</div><div style="margin-top:8px">Belum ada pengajuan fee</div></div></div>`;
   return`<div class="tw">
-    <div class="th"><div class="tt">Pengajuan Fee Marketing</div><div style="font-size:11px;color:var(--or)">${fees.filter(f=>f.status==="pending").length} pending</div></div>
-    <table><thead><tr><th>Unit</th><th>Marketing</th><th>Pembeli</th><th>Jenis</th><th>Nilai</th><th>Tgl</th><th>Aksi</th></tr></thead>
+    <div class="th"><div class="tt">Pengajuan Fee Marketing</div><div style="font-size:11px;color:var(--m)">Disetujui/ditolak oleh CFO di Verifikasi Pengajuan — ${fees.filter(f=>f.status==="pending").length} pending</div></div>
+    <table><thead><tr><th>Unit</th><th>Marketing</th><th>Pembeli</th><th>Jenis</th><th>Nilai</th><th>Tgl</th><th>Status</th></tr></thead>
     <tbody>${fees.map(f=>`<tr>
       <td><strong>${f.unit}</strong></td><td>${f.marketing}</td><td>${f.buyer}</td>
       <td><span class="bge bge-${f.type}">${f.type==="booking"?"Booking":f.type==="dp"?"DP":"Akad"}</span></td>
       <td style="color:var(--g);font-weight:700">${fR(f.price)}</td>
       <td style="font-size:11px">${fD(f.date)}</td>
-      <td>${f.status==="pending"
-        ?`<button onclick="approveFee(${f.id})" style="background:var(--gr);border:none;color:#fff;padding:4px 10px;border-radius:2px;cursor:pointer;font-family:inherit;font-size:10px;font-weight:700;margin-right:3px">✓</button>
-           <button onclick="rejectFee(${f.id})" style="background:var(--r);border:none;color:#fff;padding:4px 10px;border-radius:2px;cursor:pointer;font-family:inherit;font-size:10px;font-weight:700">✕</button>`
-        :`<span class="bge bge-${f.status}">${f.status.toUpperCase()}</span>`}
-      </td>
+      <td><span class="bge bge-${f.status}">${f.status.toUpperCase()}</span></td>
     </tr>`).join("")}
     </tbody></table>
   </div>`;
 }
-async function approveFee(id){const f=FEES.find(r=>r.id===id);if(f)f.status="approved";try{await fetch(`${SU}/rest/v1/loonars_fee?id=eq.${id}`,{method:"PATCH",headers:{...SH,"Prefer":"return=minimal"},body:JSON.stringify({status:"approved"})})}catch{}sN("✅ Fee disetujui","success");renderOwner()}
-async function rejectFee(id){const f=FEES.find(r=>r.id===id);if(f)f.status="rejected";try{await fetch(`${SU}/rest/v1/loonars_fee?id=eq.${id}`,{method:"PATCH",headers:{...SH,"Prefer":"return=minimal"},body:JSON.stringify({status:"rejected"})})}catch{}sN("Fee ditolak","error");renderOwner()}
 
 function owDetail(c){
   const u=UNITS[c]||mkU(c);
