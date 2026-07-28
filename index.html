@@ -220,10 +220,6 @@ const SH={"Content-Type":"application/json","apikey":SK,"Authorization":"Bearer 
 // used for reads/writes on this app's own data (that stays on SU/SK above).
 const MKH_URL="https://svcmybsziaelwwdrnzcv.supabase.co";
 const MKH_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2Y215YnN6aWFlbHd3ZHJuemN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyODExNzEsImV4cCI6MjA5Njg1NzE3MX0.Ds4cdAthZndisUoB4CRq1Ckc4F59TKE_n1QjxlfDEiA";
-const TG_TOKEN="8972034832:AAGCLi9HuGbmzC9O13wH9X8YxVTPG6kMQr8";
-const TG_CHAT="-5180682189";
-
-async function tgSend(msg){try{await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage?chat_id=${TG_CHAT}&parse_mode=HTML&text=${encodeURIComponent(msg)}`,{method:"GET",mode:"no-cors"})}catch{}}
 
 // ── PROJECT HARDCODED ─────────────────────────────────────────────
 const PROYEK_HC=[
@@ -657,7 +653,6 @@ async function doSaveUnit(){
 
   const ok=await saveUnitDB(u);
 
-  await tgSend(`📤 <b>UNIT ${u.code} MENUNGGU VERIFIKASI</b>\n\n🏠 Project: <b>${CP.nama}</b>\n👤 Pembeli: <b>${u.buyer}</b>\n💼 Jenis: <b>${t==="booking"?"Booking Fee":t==="dp"?"Down Payment":"Akad/Lunas"}</b>\n💰 Nilai: <b>${fR(u.price)}</b>\n📱 Marketing: <b>${CU.nama}</b>`);
   sN(`✅ Unit ${SL} dikirim ke verifikasi MKHsistem${ok?" & sync DB":""}!`,"success");
   renderSales();
 }
